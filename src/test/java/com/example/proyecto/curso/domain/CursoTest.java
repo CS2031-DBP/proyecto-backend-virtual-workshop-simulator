@@ -24,7 +24,7 @@ public class CursoTest {
         assertEquals("Ecuaciones Diferenciales", curso.getNombre());
     }
     @Test
-    void testPostNull(){
+    void testCursoNull(){
         curso = null;
         assertNull(curso);
     }

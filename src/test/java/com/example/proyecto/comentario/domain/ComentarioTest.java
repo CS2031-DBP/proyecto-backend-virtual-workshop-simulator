@@ -70,7 +70,7 @@ public class ComentarioTest {
     }
 
     @Test
-    void testDriverNull(){
+    void testComentarioNull(){
         comentario = null;
         assertNull(comentario);
     }
