@@ -15,7 +15,7 @@ public class MaterialTest {
     public void setUpMaterial(){
         material = new Material();
         material.setNombre("Vdeo Asesoria 3 EDO");
-        material.setUrl("https://asesoria.com/vdeo1");
+        material.setUrlArchivo("https://asesoria.com/vdeo1");
         LocalDate temp_date = LocalDate.parse("2024-02-13");
         material.setFechaCreada(temp_date);
         material.setTipo(Tipo.VIDEO);
@@ -31,7 +31,7 @@ public class MaterialTest {
     void testMaterialCreation(){
         assertNotNull(material);
         assertEquals("Vdeo Asesoria 3 EDO", material.getNombre());
-        assertEquals("https://asesoria.com/vdeo1", material.getUrl());
+        assertEquals("https://asesoria.com/vdeo1", material.getUrlArchivo());
         assertEquals(3.77, material.getRating());
         assertEquals(Tipo.VIDEO, material.getTipo());
         assertEquals("2024-02-13", (material.getFechaCreada().toString()));

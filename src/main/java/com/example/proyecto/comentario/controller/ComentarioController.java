@@ -17,9 +17,11 @@ public class ComentarioController {
         this.comentarioService = comentarioService;
     }
 
-    @PostMapping
-    public ResponseEntity<ComentarioResponseDto> createComentario(@RequestBody ComentarioRequestDto comentarioRequestDto) {
-        ComentarioResponseDto response = comentarioService.createComentario(comentarioRequestDto);
+    @PostMapping("/{postid}/{usuarioId}")
+    public ResponseEntity<ComentarioResponseDto> createComentario(@PathVariable Long postid,
+                                                                  @PathVariable Long usuarioId,
+                                                                  @RequestBody ComentarioRequestDto comentarioRequestDto) {
+        ComentarioResponseDto response = comentarioService.createComentario(postid,usuarioId, comentarioRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -29,11 +31,13 @@ public class ComentarioController {
         return ResponseEntity.ok(response);
     }
 
+    /*
     @PutMapping("/{id}")
     public ResponseEntity<ComentarioResponseDto> updateComentario(@PathVariable Long id, @RequestBody ComentarioRequestDto comentarioRequestDto) {
         ComentarioResponseDto response = comentarioService.updateComentario(id, comentarioRequestDto);
         return ResponseEntity.ok(response);
     }
+    */
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteComentario(@PathVariable Long id) {

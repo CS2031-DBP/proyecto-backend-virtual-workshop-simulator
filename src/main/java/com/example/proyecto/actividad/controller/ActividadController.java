@@ -13,17 +13,15 @@ public class ActividadController {
 
     private final ActividadService actividadService;
 
-    private final WherebyService wherebyService;
-
-    public ActividadController(ActividadService actividadService
-                                , WherebyService wherebyService) {
+    public ActividadController(ActividadService actividadService) {
         this.actividadService = actividadService;
-        this.wherebyService = wherebyService;
     }
 
     @PostMapping("/{usuarioId}/curso/{cursoId}")
-    public ResponseEntity<ActividadResponseDto> createActividad(@PathVariable Long usuarioId,@RequestBody ActividadRequestDto actividadRequestDto) {
-        ActividadResponseDto response = actividadService.createActividad(usuarioId, actividadRequestDto);
+    public ResponseEntity<ActividadResponseDto> createActividad(@PathVariable Long usuarioId,
+                                                                @PathVariable Long cursoId,
+                                                                @RequestBody ActividadRequestDto actividadRequestDto) {
+        ActividadResponseDto response = actividadService.createActividad(usuarioId,cursoId, actividadRequestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
