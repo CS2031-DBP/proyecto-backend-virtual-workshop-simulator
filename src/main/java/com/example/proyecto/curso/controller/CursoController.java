@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/cursos")
 public class CursoController {
@@ -22,6 +24,11 @@ public class CursoController {
     public ResponseEntity<CursoResponseDto> createCurso(@PathVariable Long carreraId,@RequestBody CursoRequestDto cursoRequestDto) {
         CursoResponseDto response = cursoService.createCurso(carreraId,cursoRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<CursoResponseDto>> retornarByCarrera(){
+        return ResponseEntity.ok(cursoService.retornarByCarrera());
     }
 
     @GetMapping("/{id}")
