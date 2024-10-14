@@ -3,6 +3,7 @@ package com.example.proyecto.carrera.domail;
 import com.example.proyecto.carrera.dto.CarreraRequestDto;
 import com.example.proyecto.carrera.dto.CarreraResponseDto;
 import com.example.proyecto.carrera.infrastructure.CarreraRepository;
+import com.example.proyecto.exception.ResourceConflictException;
 import com.example.proyecto.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.Banner;
@@ -25,7 +26,7 @@ public class CarreraService {
     public CarreraResponseDto createCarrera(CarreraRequestDto requestDto) {
 
         if (carreraRepository.findByNombre(requestDto.getNombre()).isPresent()){
-            throw new ResourceNotFoundException("La carrera ya existe");
+            throw new ResourceConflictException("La carrera ya existe");
         }
         Carrera carrera = new Carrera();
         modelMapper.map(requestDto, carrera);
