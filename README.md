@@ -89,12 +89,22 @@ están desarrollando en casos prácticos y/o aprendizajes en casos teóricos
 
 ### Descripción de la Solución
 #### Funcionalidades Implementadas
-WhereBy: 
-Amazon s3: 
-TinyUrl: 
+
+
 
 
 #### Tecnologías Utilizadas
+**Amazon s3:**
+Utilizamos esta API para almacenar archivos de manera segura en la nube a
+través de ella, esto nos permite acceder a ellos desde cualquier lugar
+mediante una URL.
+**WhereBy**
+Esta API nos permite automatizar la creación de reuniones virtuales mediante
+la generación de enlaces, facilitando el proceso y ahorrándonos el trabajo de
+hacerlo de forma manual.
+**TinyUrl**
+Con ella podemos acortar los enlaces creados para que sean más fáciles de compartir.
+
 - Mencionar las tecnologías, lenguajes de programación, y
   herramientas empleadas en el desarrollo del proyecto, API externas, bases de datos.
 
@@ -154,9 +164,12 @@ particular.
 
 ### Apéndices
 #### Licencia
-- Especificar la licencia bajo la cual se distribuye el proyecto.
+Este proyecto es distribuido bajo la licencia *GNU General Public License v3*
 
 #### Referencias
+Se utilizaron los materiales proporcionados durante las clases y asesorías del curso de
+Desarrollo Basado en Plataformas 2024-2 hasta la semana 8, consultas en diversas 
+páginas de internet para la resolución de problemas con nuestro código. 
 
 
 
