@@ -1,0 +1,435 @@
+{
+	"info": {
+		"_postman_id": "c1d872ea-71d3-4000-92b2-51140edee775",
+		"name": "Proyecto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37803123",
+		"_collection_link": "https://dbp999.postman.co/workspace/DBP-Workspace~f15aff02-63dc-46f1-b237-8d8e19c6cd53/collection/37771923-c1d872ea-71d3-4000-92b2-51140edee775?action=share&source=collection_link&creator=37803123"
+	},
+	"item": [
+		{
+			"name": "Carreras",
+			"item": [
+				{
+					"name": "CrearCarrera",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Ingeniería Industrial\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{carreras}}",
+							"host": [
+								"{{carreras}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListaCarreras",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{carreras}}/carreras",
+							"host": [
+								"{{carreras}}"
+							],
+							"path": [
+								"carreras"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuarios",
+			"item": [
+				{
+					"name": "crearUsuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\":\"Rodolfo\",\r\n    \"email\": \"rodolfo.garriazo@utec.edu.pe\",\r\n    \"password\": \"123456789\",\r\n    \"carreraId\":1\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{usuarios}}",
+							"host": [
+								"{{usuarios}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListaUsuarios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{usuarios}}/listUsuarios",
+							"host": [
+								"{{usuarios}}"
+							],
+							"path": [
+								"listUsuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "inscribirse",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{usuarios}}/1/carreras/1/inscribir",
+							"host": [
+								"{{usuarios}}"
+							],
+							"path": [
+								"1",
+								"carreras",
+								"1",
+								"inscribir"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{usuarios}}/1",
+							"host": [
+								"{{usuarios}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get usuario by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{usuarios}}/:id",
+							"host": [
+								"{{usuarios}}"
+							],
+							"path": [
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Actividades",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n    \"nombre\": \"Reunion repaso cálculo\",\r\n    \"tipo\": \"REUNION\",\r\n    \"fechaActividad\": \"2024-12-31T23:59:59Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{actividades}}/1/curso",
+							"host": [
+								"{{actividades}}"
+							],
+							"path": [
+								"1",
+								"curso"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{actividades}}/1",
+							"host": [
+								"{{actividades}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{actividades}}/352",
+							"host": [
+								"{{actividades}}"
+							],
+							"path": [
+								"352"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Reunion AlonsoConfirma\",\r\n    \"tipo\": \"REUNION\",\r\n    \"fechaActividad\": \"2024-12-31\",\r\n    \"hora\": \"16:30\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{actividades}}/1/curso",
+							"host": [
+								"{{actividades}}"
+							],
+							"path": [
+								"1",
+								"curso"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "curso",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"io1\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cursos}}/1",
+							"host": [
+								"{{cursos}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{cursos}}",
+							"host": [
+								"{{cursos}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{cursos}}/1",
+							"host": [
+								"{{cursos}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "materiales",
+			"item": [
+				{
+					"name": "Subir",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nombre",
+									"value": "archivo",
+									"type": "text"
+								},
+								{
+									"key": "tipo",
+									"value": "PDF",
+									"type": "text"
+								},
+								{
+									"key": "archivo",
+									"type": "file",
+									"src": "/C:/Users/HP/Documents/ciclo I/2022_2_Prog_1_PC2_2.03 (1).pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{materiales}}/1/4/subir",
+							"host": [
+								"{{materiales}}"
+							],
+							"path": [
+								"1",
+								"4",
+								"subir"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{materiales}}/1",
+							"host": [
+								"{{materiales}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "calificacion",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"valor\": 2,\r\n    \"usuarioId\": 1,\r\n    \"materialId\":1\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{calificaciones}}",
+							"host": [
+								"{{calificaciones}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "actividad",
+			"value": "localhost:8080/actividades"
+		},
+		{
+			"key": "carreras",
+			"value": "localhost:8080/carreras"
+		},
+		{
+			"key": "usuarios",
+			"value": "localhost:8080/usuarios"
+		},
+		{
+			"key": "actividades",
+			"value": "localhost:8080/actividades"
+		},
+		{
+			"key": "cursos",
+			"value": "localhost:8080/cursos"
+		},
+		{
+			"key": "materiales",
+			"value": "localhost:8080/materiales"
+		},
+		{
+			"key": "calificaciones",
+			"value": "localhost:8080/calificaciones"
+		}
+	]
+}
