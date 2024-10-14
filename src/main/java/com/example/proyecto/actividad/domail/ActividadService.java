@@ -4,7 +4,11 @@ import com.example.proyecto.actividad.dto.ActividadRequestDto;
 import com.example.proyecto.actividad.dto.ActividadResponseDto;
 import com.example.proyecto.actividad.infrastructure.ActividadRepository;
 import com.example.proyecto.apis.tinyUrl.TinyUrlService;
+import com.example.proyecto.carrera.domail.Carrera;
+import com.example.proyecto.curso.domail.Curso;
+import com.example.proyecto.curso.infrastructure.CursoRepository;
 import com.example.proyecto.email.event.EmailEvent;
+import com.example.proyecto.exception.ResourceForbiddenException;
 import com.example.proyecto.exception.ResourceNotFoundException;
 import com.example.proyecto.post.infrastructure.PostRepository;
 import com.example.proyecto.usuario.domail.Usuario;
@@ -16,17 +20,20 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ActividadService {
 
-   private final ActividadRepository actividadRepository;
+    private final ActividadRepository actividadRepository;
     private final ModelMapper modelMapper;
     private final PostRepository postRepository;
     private final WherebyService wherebyService;
     private final UsuarioRepository usuarioRepository;
     private final TinyUrlService tinyUrlService;
     private final ApplicationEventPublisher eventPublisher;
+    private final CursoRepository cursoRepository;
 
     public ActividadService(ActividadRepository actividadRepository,
                             ModelMapper modelMapper,
@@ -34,7 +41,7 @@ public class ActividadService {
                             WherebyService wherebyService,
                             UsuarioRepository usuarioRepository,
                             TinyUrlService tinyUrlService,
-                            ApplicationEventPublisher eventPublisher) {
+                            ApplicationEventPublisher eventPublisher, CursoRepository cursoRepository) {
         this.actividadRepository = actividadRepository;
         this.modelMapper = modelMapper;
         this.postRepository = postRepository;
@@ -42,16 +49,25 @@ public class ActividadService {
         this.usuarioRepository = usuarioRepository;
         this.tinyUrlService = tinyUrlService;
         this.eventPublisher = eventPublisher;
+        this.cursoRepository = cursoRepository;
     }
 
 
-    public ActividadResponseDto createActividad(Long id, ActividadRequestDto requestDto) {
-        Usuario usuario = usuarioRepository.findById(id)
+    public ActividadResponseDto createActividad(Long usuarioid, Long cursoId, ActividadRequestDto requestDto) {
+        Usuario usuario = usuarioRepository.findById(usuarioid)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+
+        Curso curso = cursoRepository.findById(cursoId).
+                orElseThrow(()-> new ResourceNotFoundException("Curso no encontrado"));
+
+        if (!usuario.getCarreras().contains(curso.getCarrera())) {
+            throw new ResourceForbiddenException("El usuario no está inscrito en la carrera de este curso");
+        }
 
         Actividad actividad = new Actividad();
         modelMapper.map(requestDto, actividad);
         actividad.setUsuario(usuario);
+        actividad.setCurso(curso);
 
         if (requestDto.getTipo().toString() == "REUNION") {
 
@@ -73,6 +89,7 @@ public class ActividadService {
             actividad.setEnlace("Generated Quiz Link");
         }
         usuario.getActividades().add(actividad);
+        curso.getActividades().add(actividad);
         actividadRepository.save(actividad);
 
         return modelMapper.map(actividad, ActividadResponseDto.class);
@@ -82,6 +99,15 @@ public class ActividadService {
         Actividad actividad = actividadRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Actividad no encontrada"));
         return modelMapper.map(actividad, ActividadResponseDto.class);
+    }
+
+    public List<ActividadResponseDto> getAll(){
+        List<Actividad> actividades = actividadRepository.findAll();
+        List<ActividadResponseDto> act = new ArrayList<>();
+        for (Actividad actividad:actividades){
+            act.add(modelMapper.map(actividad,ActividadResponseDto.class));
+        }
+        return act;
     }
 
     public ActividadResponseDto updateActividad(Long id, ActividadRequestDto requestDto) {

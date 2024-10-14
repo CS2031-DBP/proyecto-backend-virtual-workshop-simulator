@@ -18,7 +18,6 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final CarreraRepository carreraRepository;
-
     private final ModelMapper modelMapper;
 
     public UsuarioService(UsuarioRepository usuarioRepository,
@@ -37,16 +36,31 @@ public class UsuarioService {
         }
 
         Usuario usuario = modelMapper.map(usuarioRequestDto, Usuario.class);
-
-        Carrera carrera = carreraRepository.findById(usuarioRequestDto.getCarreraId()).
-                orElseThrow(()-> new ResourceNotFoundException("Carrera no encontrada"));
-
-        usuario.getCarreras().add(carrera);
         usuarioRepository.save(usuario);
-        UsuarioResponseDto usuarioResponseDto = modelMapper.map(usuario, UsuarioResponseDto.class);
-        usuarioResponseDto.setNombreCarrera(carrera.getNombre());
 
+        UsuarioResponseDto usuarioResponseDto = modelMapper.map(usuario, UsuarioResponseDto.class);
         return modelMapper.map(usuario, UsuarioResponseDto.class);
+    }
+
+    public UsuarioResponseDto inscribirse(Long usuarioId, Long carreraId){
+
+        Usuario usuario = usuarioRepository.findById(usuarioId).
+                orElseThrow(()-> new ResourceNotFoundException("El usuario no existe"));
+
+        Carrera carrera  =carreraRepository.findById(carreraId).
+                orElseThrow(()-> new ResourceNotFoundException("El carrera no existe"));
+
+        if (!usuario.getCarreras().contains(carrera)) {
+            usuario.getCarreras().add(carrera);
+            usuarioRepository.save(usuario);
+            //System.out.println(usuario.getCarreras());
+            carreraRepository.save(carrera);
+            return modelMapper.map(usuario, UsuarioResponseDto.class);
+
+        }else{
+            throw new ResourceConflictException("El usuario ya se encuentra inscrito en esta carrera");
+        }
+
     }
 
     public List<UsuarioResponseDto> retornarByCarrera(){

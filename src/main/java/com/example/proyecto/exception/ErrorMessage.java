@@ -2,8 +2,9 @@ package com.example.proyecto.exception;
 
 public class ErrorMessage {
 
-    String message;
-    String status;
+    private String message;
+    private String status;
+
 
     public ErrorMessage(String message, String status){
         this.message = message;

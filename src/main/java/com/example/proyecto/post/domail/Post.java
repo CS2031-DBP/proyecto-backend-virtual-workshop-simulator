@@ -5,6 +5,8 @@ import com.example.proyecto.comentario.domail.Comentario;
 import com.example.proyecto.curso.domail.Curso;
 import com.example.proyecto.material.domail.Material;
 import com.example.proyecto.usuario.domail.Usuario;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,10 +23,13 @@ public class Post {
 
     private String titulo;
 
+    private String contenido;
+
     private LocalDate fechaCreacion;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
+    @JsonBackReference
     private Usuario usuario;
 
     @ManyToOne
@@ -32,10 +37,12 @@ public class Post {
     private Curso curso;
 
     @OneToMany(mappedBy = "post")
+    @JsonManagedReference
     private List<Comentario> comentarios;
 
     @OneToMany(mappedBy = "post")
     private List<Material> materiales;
+
 
     /*
     @OneToMany(mappedBy = "post")

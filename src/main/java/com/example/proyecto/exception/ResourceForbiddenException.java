@@ -3,10 +3,11 @@ package com.example.proyecto.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.CONFLICT)
-public class ResourceConflictException extends RuntimeException {
+@ResponseStatus(HttpStatus.FORBIDDEN)
+public class ResourceForbiddenException extends RuntimeException {
 
-    public ResourceConflictException(String message) {
+    public ResourceForbiddenException(String message) {
+
       super(message);
     }
 }
