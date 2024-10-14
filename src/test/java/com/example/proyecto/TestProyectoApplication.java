@@ -8,7 +8,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @DataJpaTest
 @Testcontainers
-public class TestProyectoApplication {
+public abstract class TestProyectoApplication {
     private static final PostgreSQLContainer<?> postgresqlContainer;
 
     static {

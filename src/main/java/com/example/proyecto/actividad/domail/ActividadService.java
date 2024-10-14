@@ -60,7 +60,7 @@ public class ActividadService {
 
         Actividad actividad = new Actividad();
         modelMapper.map(requestDto, actividad);
-        actividad.setUsuario(usuario);
+        //actividad.setUsuario(usuario);
         actividad.setCurso(curso);
 
         if (requestDto.getTipo().toString() == "REUNION") {

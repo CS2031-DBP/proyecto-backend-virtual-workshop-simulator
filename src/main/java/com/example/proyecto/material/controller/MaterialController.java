@@ -1,8 +1,10 @@
 package com.example.proyecto.material.controller;
 
+import com.example.proyecto.auth.config.AuthorizationConfig;
 import com.example.proyecto.material.domail.MaterialService;
 import com.example.proyecto.material.dto.MaterialRequestDto;
 import com.example.proyecto.material.dto.MaterialResponseDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,9 @@ public class MaterialController {
     public MaterialController(MaterialService materialService) {
         this.materialService = materialService;
     }
+
+    @Autowired
+    private AuthorizationConfig authorizationConfig;
 
     /*
 

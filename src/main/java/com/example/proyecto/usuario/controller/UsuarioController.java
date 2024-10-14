@@ -25,7 +25,7 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioResponseDto);
     }
 
-    @PostMapping("/inscribir{usuarioId}/carreras/{carreraId}/inscribir")
+    @PostMapping("/{usuarioId}/carreras/{carreraId}/inscribir")
     public ResponseEntity<UsuarioResponseDto> inscripcion(@PathVariable Long usuarioId,
                                                           @PathVariable Long carreraId){
         return ResponseEntity.ok(usuarioService.inscribirse(usuarioId, carreraId));

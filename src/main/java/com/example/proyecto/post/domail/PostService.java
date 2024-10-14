@@ -2,7 +2,9 @@ package com.example.proyecto.post.domail;
 
 import com.example.proyecto.actividad.domail.Actividad;
 import com.example.proyecto.actividad.infrastructure.ActividadRepository;
+import com.example.proyecto.auth.config.AuthorizationConfig;
 import com.example.proyecto.exception.ResourceNotFoundException;
+import com.example.proyecto.exception.UnauthorizeOperationException;
 import com.example.proyecto.material.domail.Material;
 import com.example.proyecto.material.infrastructure.MaterialRepository;
 import com.example.proyecto.post.dto.PostRequestDto;
@@ -12,6 +14,7 @@ import com.example.proyecto.usuario.domail.Usuario;
 import com.example.proyecto.usuario.dto.UsuarioResponseDto;
 import com.example.proyecto.usuario.infrastructure.UsuarioRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -27,6 +30,9 @@ public class PostService {
     public final MaterialRepository materialRepository;
     public final ActividadRepository actividadRepository;
 
+    @Autowired
+    private AuthorizationConfig authorizationConfig;
+
     public PostService(PostRepository postRepository,
                        ModelMapper modelMapper,
                        UsuarioRepository usuarioRepository,
@@ -40,6 +46,12 @@ public class PostService {
     }
 
     public PostResponseDto createPost(PostRequestDto requestDto) {
+        // Here get the current user identifier (email) using Spring Security
+        String userEmail = authorizationConfig.getCurrentUserEmail();
+        if(userEmail == null){
+            throw new UnauthorizeOperationException("Not Allowed Random Users");
+        }
+        //
         Post post = new Post();
         modelMapper.map(requestDto, post);
 
@@ -66,6 +78,12 @@ public class PostService {
     }
 
     public PostResponseDto updatePost(Long id, PostRequestDto requestDto) {
+        // Here get the current user identifier (email) using Spring Security
+        String userEmail = authorizationConfig.getCurrentUserEmail();
+        if(userEmail == null){
+            throw new UnauthorizeOperationException("Not Allowed Random Users");
+        }
+        //
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Post no encontrado"));
         post.setTitulo(requestDto.getTitulo());
@@ -74,6 +92,12 @@ public class PostService {
     }
 
     public void deletePost(Long id) {
+        // Here get the current user identifier (email) using Spring Security
+        String userEmail = authorizationConfig.getCurrentUserEmail();
+        if(userEmail == null){
+            throw new UnauthorizeOperationException("Not Allowed Random Users");
+        }
+        //
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Post no encontrado"));
         postRepository.delete(post);
