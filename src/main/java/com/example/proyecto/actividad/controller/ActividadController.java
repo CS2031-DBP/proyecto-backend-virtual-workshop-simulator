@@ -22,11 +22,14 @@ public class ActividadController {
     }
 
     @PostMapping("/{usuarioId}/curso/{cursoId}")
-    public ResponseEntity<ActividadResponseDto> createActividad(@PathVariable Long usuarioId,@RequestBody ActividadRequestDto actividadRequestDto) {
-        ActividadResponseDto response = actividadService.createActividad(usuarioId, actividadRequestDto);
+    public ResponseEntity<ActividadResponseDto> createActividad(@PathVariable Long usuarioId,
+                                                                @PathVariable Long cursoId,
+                                                                @RequestBody ActividadRequestDto actividadRequestDto) {
+        ActividadResponseDto response = actividadService.createActividad(usuarioId, cursoId, actividadRequestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<ActividadResponseDto> getActividadById(@PathVariable Long id) {
@@ -35,7 +38,8 @@ public class ActividadController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ActividadResponseDto> updateActividad(@PathVariable Long id, @RequestBody ActividadRequestDto actividadRequestDto) {
+    public ResponseEntity<ActividadResponseDto> updateActividad(@PathVariable Long id,
+                                                                @RequestBody ActividadRequestDto actividadRequestDto) {
         ActividadResponseDto response = actividadService.updateActividad(id, actividadRequestDto);
         return ResponseEntity.ok(response);
     }
