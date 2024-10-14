@@ -2,6 +2,7 @@ package com.example.proyecto.calificacion.domail;
 
 import com.example.proyecto.material.domail.Material;
 import com.example.proyecto.usuario.domail.Usuario;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -19,12 +20,14 @@ public class Calificacion {
     @Max(5)
     private int valor;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "usuario_id")
+    @JsonBackReference
     private Usuario usuario;
 
     @ManyToOne
     @JoinColumn(name = "material_id")
+    @JsonBackReference
     private Material material;
 
 }
