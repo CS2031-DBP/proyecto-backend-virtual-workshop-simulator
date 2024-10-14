@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "c1d872ea-71d3-4000-92b2-51140edee775",
-		"name": "Proyecto",
+		"_postman_id": "257cd2fd-ab17-4209-b7c4-f948b55e67d1",
+		"name": "Proyecto Copy",
+		"description": "La secuencia del programa es la siguiente:\n\nPrimero debe crearse un usuario loggearse, de ahí podra crear carreras y unirse para que se manejen un estructra más ordenada.\n\nEn cada carrera se deben crear cursos primero, una vez que se creen los cursos podran subir un material o también crear alguna actividad de acuerdo al interes de cada usuario.\n\nEn el curso se suben materiales que pueden ser calificados por los usarios, con el fin de manejar archivos relevantes segund un promedio de evaluacion de los materiales ya que la califiación de esto puede ser del 1 al 5.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "37803123",
-		"_collection_link": "https://dbp999.postman.co/workspace/DBP-Workspace~f15aff02-63dc-46f1-b237-8d8e19c6cd53/collection/37771923-c1d872ea-71d3-4000-92b2-51140edee775?action=share&source=collection_link&creator=37803123"
+		"_exporter_id": "37771923"
 	},
 	"item": [
 		{
@@ -39,18 +39,16 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{carreras}}/carreras",
+							"raw": "{{carreras}}",
 							"host": [
 								"{{carreras}}"
-							],
-							"path": [
-								"carreras"
 							]
 						}
 					},
 					"response": []
 				}
-			]
+			],
+			"description": "En el proyecto para manejar un poco de estructura los usuarios podran visualizar las carreras de las cuales este interesado averiguar algún tipo de información u ayuda por ello que **es importante que se cree esta entidad además que los posts se realizarán por carrera**; se maneja el **nombre de las carrera como un identificador unico** para que **no** se generen copias o se sobre escriban valores.\n\nPara una secuencia o validar valores a medida que se hacen las pruebas tambien se implemento un endpoint para la lista de carreras creadas. Aunque existen más endpoints creados consideramos relevantes solo estos para menejar errores."
 		},
 		{
 			"name": "Usuarios",
@@ -131,37 +129,15 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "get usuario by id",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{usuarios}}/:id",
-							"host": [
-								"{{usuarios}}"
-							],
-							"path": [
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
 				}
-			]
+			],
+			"description": "La entidad es esecial para que funcione el manejo del codigo, en este caso la funcion proporciona informacion esencial para **la creación además de la asignación del usuario a la carrera de su interes**, Esto con el fin que si no esta inscrito en cada carrera puede visitar información pero no puede participar en actividades o calificaciones del material que se comparte es mas **como una guia de visita nada más**. Para este caso se implemento solo algunos endpoints importante spara ver el manejo del programa.\n\nLos usuarios **pueden publicar post** para generar un sitio de interacción. Esto con la idea que los usuarios **puedan estar informados de actividades** que se dan en la vida universitaria, o quizas actividades que se proponen en la misma plataforma.\n\nPueden **calificar el material** subido en un curso para reiterar la relevancia del archivo.\n\nAdemás la importancia de la inscripción en una carrera para que **pueda subir archivos**."
 		},
 		{
 			"name": "Actividades",
 			"item": [
 				{
-					"name": "New Request",
+					"name": "Crear Reunion",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -188,7 +164,7 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "mostrat reunion",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -205,7 +181,7 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "Eliminar",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -220,41 +196,15 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "New Request",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"nombre\": \"Reunion AlonsoConfirma\",\r\n    \"tipo\": \"REUNION\",\r\n    \"fechaActividad\": \"2024-12-31\",\r\n    \"hora\": \"16:30\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{actividades}}/1/curso",
-							"host": [
-								"{{actividades}}"
-							],
-							"path": [
-								"1",
-								"curso"
-							]
-						}
-					},
-					"response": []
 				}
-			]
+			],
+			"description": "En la plataformas se podra **crear actividades** como asesorias que algun usuario quiera brindar, o reuniones en donde pueden debatir ideas y poder generar mejores ideas sobre algun tema o curso de interes. Las actividades propuestas en esta guia esta basada en Reuniones por medio de whereBy.\n\nAsismismo se **pueden eliminar reuniones**, y para una secuencia del programa, se **listan reuniones** por curso creado. claro pueden haber más de una reunion en el mismo curso."
 		},
 		{
 			"name": "curso",
 			"item": [
 				{
-					"name": "New Request",
+					"name": "Crear curso",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -280,7 +230,7 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "Listar cursos",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -294,7 +244,7 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "Eliminar curso",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -310,7 +260,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"description": "Entidad creda para un manejo de estructura más eficaz, es decir, como se subiran archivos, actividades poder distribuir la forma de almacenar la información ya que se podrán enviar posts de acuerdo a la carrera."
 		},
 		{
 			"name": "materiales",
@@ -353,31 +304,15 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "New Request",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{materiales}}/1",
-							"host": [
-								"{{materiales}}"
-							],
-							"path": [
-								"1"
-							]
-						}
-					},
-					"response": []
 				}
-			]
+			],
+			"description": "Los usuarios pueden **subir materiales por el momento**, quizá para una siguiente entrega podran descargar los archivos de acuerdo a la interes de cada usuario."
 		},
 		{
 			"name": "calificacion",
 			"item": [
 				{
-					"name": "New Request",
+					"name": "Calificar",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -399,37 +334,14 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"description": "Para que la entidad entre en funcionamiento se validan que **el usuario y el material esten inscritos y mediante esto poder calificar la relevancia del material**, esta idea para generar una forma de puntuaciónde estrellas de acuerdoa la relevancia de los usuarios."
 		}
 	],
 	"variable": [
 		{
-			"key": "actividad",
-			"value": "localhost:8080/actividades"
-		},
-		{
 			"key": "carreras",
 			"value": "localhost:8080/carreras"
-		},
-		{
-			"key": "usuarios",
-			"value": "localhost:8080/usuarios"
-		},
-		{
-			"key": "actividades",
-			"value": "localhost:8080/actividades"
-		},
-		{
-			"key": "cursos",
-			"value": "localhost:8080/cursos"
-		},
-		{
-			"key": "materiales",
-			"value": "localhost:8080/materiales"
-		},
-		{
-			"key": "calificaciones",
-			"value": "localhost:8080/calificaciones"
 		}
 	]
 }
