@@ -5,6 +5,7 @@ import com.example.proyecto.carrera.domail.Carrera;
 import com.example.proyecto.comentario.domail.Comentario;
 import com.example.proyecto.material.domail.Material;
 import com.example.proyecto.post.domail.Post;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -37,13 +38,17 @@ public class Usuario {
 
     private LocalDateTime fechaRegistro;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
     @JoinTable(
             name = "usuario_carrera",
-            joinColumns = @JoinColumn(name = "usuario_id"),
-            inverseJoinColumns = @JoinColumn(name = "carrera_id")
+            joinColumns = @JoinColumn(
+                    name = "usuario_id",
+                    referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "carrera_id",
+                    referencedColumnName = "id")
     )
-    private Set<Carrera> carreras = new HashSet<>();
+    private List<Carrera> carreras;
 
     @OneToMany(mappedBy = "usuario")
     private List<Post> posts;
@@ -55,13 +60,11 @@ public class Usuario {
     private List<Comentario> comentarios;
 
     @OneToMany(mappedBy = "usuario")
+    @JsonManagedReference
     private List<Actividad> actividades;
 
     @PrePersist
     public void onPrePersist() {
         fechaRegistro = LocalDateTime.now();
     }
-
-
-
 }
