@@ -1,5 +1,6 @@
 package com.example.proyecto.material.domail;
 
+import com.example.proyecto.apis.amazonS3.AwsServices;
 import com.example.proyecto.curso.domail.Curso;
 import com.example.proyecto.curso.infrastructure.CursoRepository;
 import com.example.proyecto.exception.ResourceConflictException;
@@ -26,12 +27,18 @@ public class MaterialService {
     private final ModelMapper modelMapper;
     private final UsuarioRepository usuarioRepository;
     private final CursoRepository cursoRepository;
+    private final AwsServices awsServices;
 
-    public MaterialService(MaterialRepository materialRepository, ModelMapper modelMapper, UsuarioRepository usuarioRepository, CursoRepository cursoRepository) {
+    public MaterialService(MaterialRepository materialRepository,
+                           ModelMapper modelMapper,
+                           UsuarioRepository usuarioRepository,
+                           CursoRepository cursoRepository,
+                           AwsServices awsServices) {
         this.materialRepository = materialRepository;
         this.modelMapper = modelMapper;
         this.usuarioRepository = usuarioRepository;
         this.cursoRepository = cursoRepository;
+        this.awsServices = awsServices;
     }
 
 
