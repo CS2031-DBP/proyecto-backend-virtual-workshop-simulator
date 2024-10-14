@@ -16,22 +16,13 @@ public class MaterialController {
         this.materialService = materialService;
     }
 
-    @PostMapping
-    public ResponseEntity<MaterialResponseDto> createMaterial(@RequestBody MaterialRequestDto materialRequestDto) {
-        MaterialResponseDto response = materialService.createMaterial(materialRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<MaterialResponseDto> getMaterialById(@PathVariable Long id) {
-        MaterialResponseDto response = materialService.getMaterialById(id);
-        return ResponseEntity.ok(response);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<MaterialResponseDto> updateMaterial(@PathVariable Long id, @RequestBody MaterialRequestDto materialRequestDto) {
-        MaterialResponseDto response = materialService.updateMaterial(id, materialRequestDto);
-        return ResponseEntity.ok(response);
+    @PostMapping("/{cursoId}/{usuarioId}/subir")
+    public ResponseEntity<MaterialResponseDto> subirMaterial(
+            @PathVariable Long cursoId,
+            @PathVariable Long usuarioId,
+            @ModelAttribute MaterialRequestDto requestDto) {
+        MaterialResponseDto responseDto = materialService.subirMaterial(cursoId, usuarioId, requestDto);
+        return ResponseEntity.ok(responseDto);
     }
 
     @DeleteMapping("/{id}")
@@ -39,5 +30,6 @@ public class MaterialController {
         materialService.deleteMaterial(id);
         return ResponseEntity.noContent().build();
     }
+
 }
 
