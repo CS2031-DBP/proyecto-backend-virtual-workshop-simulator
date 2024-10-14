@@ -25,6 +25,9 @@ jobs:
 
       - name: Build and test with Maven
         run: mvn -B clean package --file pom.xml
+        
+      - name: List files for debugging 
+        run: ls -la
 
       - name: Build Docker image
         run: |
