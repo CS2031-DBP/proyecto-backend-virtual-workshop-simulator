@@ -14,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -51,7 +53,8 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UsuarioRequestDto signUpRequest) {
-        if (usuarioRepository.existsByEmail(signUpRequest.getEmail())) {
+        Optional<Usuario> user = usuarioRepository.findByEmail(signUpRequest.getEmail());
+        if (user.isPresent()) {
             return ResponseEntity.badRequest().body("Error: El email ya está en uso.");
         }
 
