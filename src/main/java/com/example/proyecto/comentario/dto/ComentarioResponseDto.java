@@ -16,6 +16,4 @@ public class ComentarioResponseDto {
 
     private String usuarioNombre;
 
-    private Long postId;
-
 }

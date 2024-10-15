@@ -8,11 +8,14 @@ import java.util.List;
 @Data
 public class PostRequestDto {
 
-    private String titulo;
+    private  Long id;
 
     private Long usuarioId;
 
-    private List<Long> materialesIds;
+    private Long carreraId;
 
-    private List<Long> actividadesIds;
+    private String titulo;
+
+    private String contenido;
+
 }

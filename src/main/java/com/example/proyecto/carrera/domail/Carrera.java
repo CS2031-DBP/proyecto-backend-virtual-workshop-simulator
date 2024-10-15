@@ -2,12 +2,12 @@ package com.example.proyecto.carrera.domail;
 
 import com.example.proyecto.curso.domail.Curso;
 import com.example.proyecto.usuario.domail.Usuario;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Entity
@@ -21,11 +21,8 @@ public class Carrera {
     private String nombre;
 
     @OneToMany(mappedBy = "carrera")
+    @JsonManagedReference
     private List<Curso> cursos;
-
-    @ManyToMany(mappedBy = "carreras")
-    private Set<Usuario> usuarios = new HashSet<>();
-
 
 
 }

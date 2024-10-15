@@ -17,7 +17,7 @@ public class CalificacionController {
     @Autowired
     private CalificacionService calificacionService;
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<MaterialResponseDto> calificarMaterial(@RequestBody CalificacionRequestDto request) {
         MaterialResponseDto materialResponse = calificacionService.calificarMaterial(request);
         return ResponseEntity.ok(materialResponse);

@@ -1,5 +1,6 @@
 package com.example.proyecto.post.dto;
 
+import com.example.proyecto.comentario.domail.Comentario;
 import com.example.proyecto.material.dto.MaterialResponseDto;
 import com.example.proyecto.usuario.dto.UsuarioRequestDto;
 import lombok.Data;
@@ -14,13 +15,12 @@ public class PostResponseDto {
 
     private String titulo;
 
-    private LocalDateTime fechaCreacion;
-
     private String autorNombre;
 
-    private List<MaterialResponseDto> materiales;
+    private String contenido;
 
-    private List<Long> comentariosIds;
+    private LocalDateTime fechaCreacion;
 
-    private List<Long> actividadesIds;
+    private List<Comentario> comentariosIds;
+
 }

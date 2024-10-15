@@ -11,7 +11,7 @@ public class MaterialResponseDto {
 
     private String nombre;
 
-    private String url;
+    private String urlArchivo;
 
     private Tipo tipo;
 

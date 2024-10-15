@@ -45,6 +45,7 @@ public class WherebyService {
         }
     }
 
+    /*
     public void deleteWherebyMeeting(String meetingUrl) throws IOException, InterruptedException {
 
         String meetingId = extractMeetingIdFromUrl(meetingUrl);
@@ -76,6 +77,8 @@ public class WherebyService {
         }
         return null;
     }
+
+     */
 
 
 }
