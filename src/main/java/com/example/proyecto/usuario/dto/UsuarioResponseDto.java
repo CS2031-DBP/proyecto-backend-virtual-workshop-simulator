@@ -1,5 +1,6 @@
 package com.example.proyecto.usuario.dto;
 
+import com.example.proyecto.carrera.domail.Carrera;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -17,7 +18,7 @@ public class UsuarioResponseDto {
 
     private LocalDateTime fechaRegistro;
 
-    private String nombreCarrera;
+    private List<Carrera> carreras;
 
     private List<Long> postIds;
 

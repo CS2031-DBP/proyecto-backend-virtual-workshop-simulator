@@ -16,6 +16,6 @@ public class UsuarioRequestDto {
     @Size(min = 8, message = "Contraseña minimo de 8 carcateres")
     private String password;
 
-    private Long carreraId;
+    //private Long carreraId;
 
 }

@@ -30,14 +30,16 @@ public class ComentarioService {
 
     }
 
-    public ComentarioResponseDto createComentario(ComentarioRequestDto requestDto) {
+    public ComentarioResponseDto createComentario(Long postId, Long usuarioid,ComentarioRequestDto requestDto) {
+
+        Usuario usuario = usuarioRepository.findById(usuarioid)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("Post no encontrado"));
+
         Comentario comentario = new Comentario();
         modelMapper.map(requestDto, comentario);
-
-        Usuario usuario = usuarioRepository.findById(requestDto.getUsuarioId())
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
-        Post post = postRepository.findById(requestDto.getPostId())
-                .orElseThrow(() -> new ResourceNotFoundException("Post no encontrado"));
 
         comentario.setUsuario(usuario);
         comentario.setPost(post);
