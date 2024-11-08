@@ -1,5 +1,6 @@
 package com.example.proyecto.usuario.domail;
 
+
 import com.example.proyecto.carrera.domail.Carrera;
 import com.example.proyecto.carrera.infrastructure.CarreraRepository;
 import com.example.proyecto.exception.ResourceConflictException;
@@ -8,6 +9,10 @@ import com.example.proyecto.usuario.dto.UsuarioRequestDto;
 import com.example.proyecto.usuario.dto.UsuarioResponseDto;
 import com.example.proyecto.usuario.infrastructure.UsuarioRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,7 +24,6 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final CarreraRepository carreraRepository;
     private final ModelMapper modelMapper;
-
     public UsuarioService(UsuarioRepository usuarioRepository,
                           CarreraRepository carreraRepository,
                           ModelMapper modelMapper) {
@@ -43,8 +47,10 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDto inscribirse(Long usuarioId, Long carreraId){
-
+        System.out.println(usuarioId);
+        System.out.println(carreraId);
         Usuario usuario = usuarioRepository.findById(usuarioId).
+
                 orElseThrow(()-> new ResourceNotFoundException("El usuario no existe"));
 
         Carrera carrera  =carreraRepository.findById(carreraId).
@@ -54,7 +60,6 @@ public class UsuarioService {
             usuario.getCarreras().add(carrera);
             usuarioRepository.save(usuario);
             //System.out.println(usuario.getCarreras());
-            carreraRepository.save(carrera);
             return modelMapper.map(usuario, UsuarioResponseDto.class);
 
         }else{
@@ -92,5 +97,25 @@ public class UsuarioService {
                 orElseThrow(()-> new ResourceNotFoundException("Usuario no encontrado"));
         usuarioRepository.delete(usuario);
     }
+
+    public Usuario findByEmail(String username, String role) {
+        Usuario user;
+        if (role.equals("ROLE_USER"))
+            user = usuarioRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        else
+            user = usuarioRepository.findByEmail(username).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        return user;
+    }
+    @Bean(name = "UserDetailsService")
+    public UserDetailsService userDetailsService() {
+        return username -> {
+            Usuario user = usuarioRepository
+                    .findByEmail(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            return (UserDetails) user;
+        };
+    }
+
 
 }

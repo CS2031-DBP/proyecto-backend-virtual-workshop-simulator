@@ -2,9 +2,11 @@ package com.example.proyecto.post.domail;
 
 import com.example.proyecto.actividad.domail.Actividad;
 import com.example.proyecto.actividad.infrastructure.ActividadRepository;
+import com.example.proyecto.auth.config.AuthorizationConfig;
 import com.example.proyecto.carrera.domail.Carrera;
 import com.example.proyecto.carrera.infrastructure.CarreraRepository;
 import com.example.proyecto.exception.ResourceNotFoundException;
+import com.example.proyecto.exception.UnauthorizeOperationException;
 import com.example.proyecto.material.domail.Material;
 import com.example.proyecto.material.infrastructure.MaterialRepository;
 import com.example.proyecto.post.dto.PostRequestDto;
@@ -27,22 +29,30 @@ public class PostService {
     public final MaterialRepository materialRepository;
     public final ActividadRepository actividadRepository;
     private final CarreraRepository carreraRepository;
+    private final AuthorizationConfig authorizationConfig;
 
     public PostService(PostRepository postRepository,
                        ModelMapper modelMapper,
                        UsuarioRepository usuarioRepository,
                        MaterialRepository materialRepository,
-                       ActividadRepository actividadRepository, CarreraRepository carreraRepository) {
+                       ActividadRepository actividadRepository,
+                       CarreraRepository carreraRepository,
+                       AuthorizationConfig authorizationConfig) {
         this.postRepository = postRepository;
         this.modelMapper = modelMapper;
         this.usuarioRepository = usuarioRepository;
         this.materialRepository = materialRepository;
         this.actividadRepository = actividadRepository;
         this.carreraRepository = carreraRepository;
+        this.authorizationConfig = authorizationConfig;
     }
 
     public PostResponseDto createPost(PostRequestDto requestDto) {
 
+        String userEmail = authorizationConfig.getCurrentUserEmail();
+        if(userEmail == null){
+            throw new UnauthorizeOperationException("Not Allowed Random Users");
+        }
         Usuario usuario = usuarioRepository.findById(requestDto.getUsuarioId()).
                 orElseThrow(()-> new ResourceNotFoundException("Usuario no encontrado"));
 
@@ -78,6 +88,10 @@ public class PostService {
     }
 
     public PostResponseDto updatePost(Long id, PostRequestDto requestDto) {
+        String userEmail = authorizationConfig.getCurrentUserEmail();
+        if(userEmail == null){
+            throw new UnauthorizeOperationException("Not Allowed Random Users");
+        }
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Post no encontrado"));
         post.setTitulo(requestDto.getTitulo());
@@ -86,6 +100,11 @@ public class PostService {
     }
 
     public void deletePost(Long id) {
+        String userEmail = authorizationConfig.getCurrentUserEmail();
+        if(userEmail == null){
+            throw new UnauthorizeOperationException("Not Allowed Random Users");
+        }
+
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Post no encontrado"));
         postRepository.delete(post);
