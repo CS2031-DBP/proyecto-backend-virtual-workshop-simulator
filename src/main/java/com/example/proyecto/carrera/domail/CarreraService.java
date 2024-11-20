@@ -7,6 +7,8 @@ import com.example.proyecto.exception.ResourceConflictException;
 import com.example.proyecto.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.Banner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -40,21 +42,16 @@ public class CarreraService {
         return modelMapper.map(carrera, CarreraResponseDto.class);
     }
 
-    public List<CarreraResponseDto> getAll(){
-        List<Carrera> carreras = carreraRepository.findAll();
-        List<CarreraResponseDto> carrerasDto = new ArrayList<>();
-        for (Carrera carrera : carreras) {
-            carrerasDto.add(modelMapper.map(carrera, CarreraResponseDto.class));
-        }
-
-        return carrerasDto;
+    public Page<CarreraResponseDto> getAll(Pageable pageable){
+        return carreraRepository.findAll(pageable)
+                .map(carrera -> modelMapper.map(carrera, CarreraResponseDto.class));
     }
 
     public CarreraResponseDto updateCarrera(Long id, CarreraRequestDto requestDto) {
         Carrera carrera = carreraRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Carrera no encontrada"));
-        modelMapper.map(requestDto, carrera);
-        carreraRepository.save(carrera);
+
+        carrera.setNombre(requestDto.getNombre());
         return modelMapper.map(carrera, CarreraResponseDto.class);
     }
 

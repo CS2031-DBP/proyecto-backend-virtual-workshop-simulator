@@ -31,7 +31,11 @@ public class JwtService {
 
         Algorithm algorithm = Algorithm.HMAC256(secret);
 
-        return JWT.create().withSubject(data.getUsername()).withClaim("role", data.getAuthorities().toArray()[0].toString()).withIssuedAt(now).withExpiresAt(expiration).sign(algorithm);
+        return JWT.create()
+                .withSubject(data.getUsername())
+                .withIssuedAt(now)
+                .withExpiresAt(expiration)
+                .sign(algorithm);
     }
     public String extractUsername(String token) {
         return JWT.decode(token).getSubject();

@@ -36,8 +36,6 @@ public class Curso {
     @JsonManagedReference
     private List<Actividad> actividades;
 
-    @OneToMany(mappedBy = "curso")
-    private List<Post> posts;
 
 
 

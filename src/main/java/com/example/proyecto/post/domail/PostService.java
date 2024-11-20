@@ -1,25 +1,24 @@
 package com.example.proyecto.post.domail;
 
-import com.example.proyecto.actividad.domail.Actividad;
 import com.example.proyecto.actividad.infrastructure.ActividadRepository;
 import com.example.proyecto.auth.config.AuthorizationConfig;
 import com.example.proyecto.carrera.domail.Carrera;
 import com.example.proyecto.carrera.infrastructure.CarreraRepository;
 import com.example.proyecto.exception.ResourceNotFoundException;
 import com.example.proyecto.exception.UnauthorizeOperationException;
-import com.example.proyecto.material.domail.Material;
 import com.example.proyecto.material.infrastructure.MaterialRepository;
 import com.example.proyecto.post.dto.PostRequestDto;
 import com.example.proyecto.post.dto.PostResponseDto;
+import com.example.proyecto.post.dto.PostUpdate;
 import com.example.proyecto.post.infrastructure.PostRepository;
 import com.example.proyecto.usuario.domail.Usuario;
-import com.example.proyecto.usuario.dto.UsuarioResponseDto;
 import com.example.proyecto.usuario.infrastructure.UsuarioRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.data.domain.Page;
+
 @Service
 public class PostService {
 
@@ -59,26 +58,21 @@ public class PostService {
         Carrera carrera = carreraRepository.findById(requestDto.getCarreraId()).
                 orElseThrow(()-> new ResourceNotFoundException("Carrera no encontrado"));
 
-        Post post = new Post();
-        modelMapper.map(requestDto, post);
+        if (!usuario.getCarreras().contains(carrera)) {
+            throw new UnauthorizeOperationException("No puedes hacer publicaciones. No está inscrito en la carrera.");
+        }
 
-        post.setUsuario(usuario);
-
+        Post post = modelMapper.map(requestDto, Post.class);
+        post.setAutor(usuario);
         postRepository.save(post);
 
-        PostResponseDto responseDto = modelMapper.map(post, PostResponseDto.class);
-        responseDto.setAutorNombre(usuario.getNombre());
-
         return modelMapper.map(post, PostResponseDto.class);
+
     }
 
-    public List<PostResponseDto> getAll(){
-        List<Post> posts = postRepository.findAll();
-        List<PostResponseDto> responseDtos = new ArrayList<>();
-        for (Post post : posts) {
-            responseDtos.add(modelMapper.map(post, PostResponseDto.class));
-        }
-        return responseDtos;
+    public Page<PostResponseDto> getAll(Pageable pageable) {
+        return postRepository.findAll(pageable)
+                .map(post -> modelMapper.map(post, PostResponseDto.class));
     }
 
     public PostResponseDto getPostById(Long id) {
@@ -87,14 +81,21 @@ public class PostService {
         return modelMapper.map(post, PostResponseDto.class);
     }
 
-    public PostResponseDto updatePost(Long id, PostRequestDto requestDto) {
+    public PostResponseDto updatePost(Long id, PostUpdate requestDto) {
         String userEmail = authorizationConfig.getCurrentUserEmail();
         if(userEmail == null){
-            throw new UnauthorizeOperationException("Not Allowed Random Users");
+            throw new UnauthorizeOperationException("No se encuentra AUTORIZADO!!");
         }
+
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Post no encontrado"));
+
+        if (!post.getAutor().getEmail().equals(userEmail)) {
+            throw new UnauthorizeOperationException("No puedes actualizar este post");
+        }
+
         post.setTitulo(requestDto.getTitulo());
+        post.setContenido(requestDto.getContenido());
         postRepository.save(post);
         return modelMapper.map(post, PostResponseDto.class);
     }
@@ -102,11 +103,23 @@ public class PostService {
     public void deletePost(Long id) {
         String userEmail = authorizationConfig.getCurrentUserEmail();
         if(userEmail == null){
-            throw new UnauthorizeOperationException("Not Allowed Random Users");
+            throw new UnauthorizeOperationException("No tiene Autorizacion");
         }
 
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Post no encontrado"));
+
+        Usuario usuario = usuarioRepository.findByEmail(userEmail).
+                orElseThrow(()-> new ResourceNotFoundException("Usuario no encontrado"));
+
+        if (!usuario.getCarreras().contains(post.getCarrera())) {
+            throw new UnauthorizeOperationException("No puedes hacer publicaciones. No está inscrito en la carrera.");
+        }
+
+        if (!post.getAutor().getEmail().equals(userEmail)) {
+            throw new UnauthorizeOperationException("No puedes eliminar este post");
+        }
+
         postRepository.delete(post);
     }
 

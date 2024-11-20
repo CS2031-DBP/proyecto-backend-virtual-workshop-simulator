@@ -10,7 +10,7 @@ public class CursoResponseDto {
 
     private String nombre;
     private String carreraNombre;
-    private List<Long> postIds;
     private List<Long> materialIds;
+    private List<MaterialResponseDto> materials;
 
 }

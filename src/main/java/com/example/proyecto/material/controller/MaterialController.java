@@ -44,6 +44,7 @@ public class MaterialController {
     }
      */
 
+    /*
     @PostMapping("/{cursoId}/{usuarioId}/subir")
     public ResponseEntity<MaterialResponseDto> subirMaterial(
             @PathVariable Long cursoId,
@@ -57,7 +58,7 @@ public class MaterialController {
     public ResponseEntity<Void> deleteMaterial(@PathVariable Long id) {
         materialService.deleteMaterial(id);
         return ResponseEntity.noContent().build();
-    }
+    }*/
 
 }
 

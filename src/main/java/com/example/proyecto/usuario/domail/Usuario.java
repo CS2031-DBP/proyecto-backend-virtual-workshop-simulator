@@ -30,6 +30,7 @@ public class Usuario implements UserDetails {
     private Long id;
 
     @NotNull
+    @JoinColumn(nullable = false, unique = true)
     private String nombre;
 
     @Email
@@ -38,6 +39,8 @@ public class Usuario implements UserDetails {
 
     @Size(min = 8, message = "la contraseña debe tener un min de 8 caracteres")
     private String password;
+
+    private String perfilUrl;
 
     private LocalDateTime fechaRegistro;
 
@@ -53,12 +56,10 @@ public class Usuario implements UserDetails {
     )
     private List<Carrera> carreras;
 
-    private Role role;
-
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "autor")
     private List<Post> posts;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "propietario")
     private List<Material> materiales;
 
     @OneToMany(mappedBy = "usuario")
@@ -72,12 +73,10 @@ public class Usuario implements UserDetails {
     public void onPrePersist() {
         fechaRegistro = LocalDateTime.now();
     }
-    @Transient
-    private String rolePrefix = "ROLE_";
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(rolePrefix + role.name()));
+        return List.of();
     }
 
 

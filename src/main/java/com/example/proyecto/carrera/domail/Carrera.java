@@ -1,8 +1,7 @@
 package com.example.proyecto.carrera.domail;
 
 import com.example.proyecto.curso.domail.Curso;
-import com.example.proyecto.usuario.domail.Usuario;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.example.proyecto.post.domail.Post;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -23,6 +22,10 @@ public class Carrera {
     @OneToMany(mappedBy = "carrera")
     @JsonManagedReference
     private List<Curso> cursos;
+
+    @OneToMany(mappedBy = "carrera")
+    @JsonManagedReference
+    private List<Post> posts;
 
 
 }

@@ -1,6 +1,8 @@
 package com.example.proyecto.auth.config;
 
-import com.example.proyecto.usuario.domail.Role;
+import com.example.proyecto.material.domail.Material;
+import com.example.proyecto.material.domail.MaterialService;
+import com.example.proyecto.material.infrastructure.MaterialRepository;
 import com.example.proyecto.usuario.domail.Usuario;
 import com.example.proyecto.usuario.domail.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +17,16 @@ public class AuthorizationConfig {
     @Autowired
     private UsuarioService usuarioService;
 
-    public boolean verificar_si_es_admin(Long id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
+    @Autowired
+    private MaterialRepository materialRepository;
 
-        String name = userDetails.getUsername();
-        String role = userDetails.getAuthorities().toArray()[0].toString();
-        Usuario user= usuarioService.findByEmail(name, role);
-        boolean es_verdad = user.getId().equals(id) || user.getRole().equals(Role.ADMIN);
-        return es_verdad;
+
+    public boolean esPropietario(Long usuarioId, Long materialId) {
+        Material material = materialRepository.findById(materialId)
+                .orElseThrow(() -> new IllegalArgumentException("Material no encontrado"));
+        return material.getPropietario().getId().equals(usuarioId);
     }
+
 
     public String getCurrentUserEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

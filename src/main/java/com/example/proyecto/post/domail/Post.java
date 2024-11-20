@@ -1,9 +1,7 @@
 package com.example.proyecto.post.domail;
 
-import com.example.proyecto.actividad.domail.Actividad;
+import com.example.proyecto.carrera.domail.Carrera;
 import com.example.proyecto.comentario.domail.Comentario;
-import com.example.proyecto.curso.domail.Curso;
-import com.example.proyecto.material.domail.Material;
 import com.example.proyecto.usuario.domail.Usuario;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -19,7 +17,7 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long post_id;
+    private Long id;
 
     private String titulo;
 
@@ -28,26 +26,19 @@ public class Post {
     private LocalDate fechaCreacion;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "autor_id")
     @JsonBackReference
-    private Usuario usuario;
+    private Usuario autor;
 
     @ManyToOne
-    @JoinColumn(name = "curso_id")
-    private Curso curso;
+    @JoinColumn(name = "carrera_id")
+    @JsonBackReference
+    private Carrera carrera;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Comentario> comentarios;
 
-    @OneToMany(mappedBy = "post")
-    private List<Material> materiales;
-
-
-    /*
-    @OneToMany(mappedBy = "post")
-    private List<Actividad> actividades;
-    */
 
     @PrePersist
     public void prePersist(){

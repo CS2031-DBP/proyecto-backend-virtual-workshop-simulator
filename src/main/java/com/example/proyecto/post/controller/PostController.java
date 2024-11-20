@@ -3,6 +3,10 @@ package com.example.proyecto.post.controller;
 import com.example.proyecto.post.domail.PostService;
 import com.example.proyecto.post.dto.PostRequestDto;
 import com.example.proyecto.post.dto.PostResponseDto;
+import com.example.proyecto.post.dto.PostUpdate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +29,11 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostResponseDto>> getAllPosts() {
-        return ResponseEntity.ok(postService.getAll());
+    public ResponseEntity<Page<PostResponseDto>> getPosts(@RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PostResponseDto> posts = postService.getAll(pageable);
+        return ResponseEntity.ok(posts);
     }
 
     @GetMapping("/{id}")
@@ -36,8 +43,9 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto) {
-        PostResponseDto response = postService.updatePost(id, postRequestDto);
+    public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long id,
+                                                      @RequestBody PostUpdate requestDto) {
+        PostResponseDto response = postService.updatePost(id, requestDto);
         return ResponseEntity.ok(response);
     }
 

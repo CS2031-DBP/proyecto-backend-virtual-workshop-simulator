@@ -1,6 +1,7 @@
 package com.example.proyecto.material.domail;
 
 import com.example.proyecto.apis.amazonS3.AwsServices;
+import com.example.proyecto.auth.config.AuthorizationConfig;
 import com.example.proyecto.curso.domail.Curso;
 import com.example.proyecto.curso.infrastructure.CursoRepository;
 import com.example.proyecto.exception.ResourceConflictException;
@@ -29,17 +30,20 @@ public class MaterialService {
     private final UsuarioRepository usuarioRepository;
     private final CursoRepository cursoRepository;
     private final AwsServices awsServices;
+    private final AuthorizationConfig authorizationConfig;
 
     public MaterialService(MaterialRepository materialRepository,
                            ModelMapper modelMapper,
                            UsuarioRepository usuarioRepository,
                            CursoRepository cursoRepository,
-                           AwsServices awsServices) {
+                           AwsServices awsServices,
+                           AuthorizationConfig authorizationConfig) {
         this.materialRepository = materialRepository;
         this.modelMapper = modelMapper;
         this.usuarioRepository = usuarioRepository;
         this.cursoRepository = cursoRepository;
         this.awsServices = awsServices;
+        this.authorizationConfig = authorizationConfig;
     }
 
     /*
@@ -120,6 +124,8 @@ public class MaterialService {
         materialRepository.delete(material);
     }
     */
+
+    /*
     public MaterialResponseDto subirMaterial(Long cursoId,
                                              Long usuarioId,
                                              MaterialRequestDto requestDto) {
@@ -133,10 +139,7 @@ public class MaterialService {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
 
-        //Almacenar el archivo  AWS S3
         try{
-            //String urlArchivo = almacenarArchivo(requestDto.getArchivo());
-
             String urlArchivo = awsServices.uploadFile(requestDto.getArchivo());
 
             Material material = new Material();
@@ -144,7 +147,7 @@ public class MaterialService {
             material.setTipo(requestDto.getTipo());
             material.setUrlArchivo(urlArchivo);
             material.setCurso(curso);
-            material.setUsuario(usuario);
+            material.setPropietario(usuario);
 
             materialRepository.save(material);
 
@@ -178,6 +181,13 @@ public class MaterialService {
     public void deleteMaterial(Long id) {
         Material material = materialRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Material no encontrado"));
+
+        String usuarioAuenticado = authorizationConfig.getCurrentUserEmail();
+
+        if (!material.getPropietario().getEmail().equals(usuarioAuenticado)){
+            throw new SecurityException("No tienes permiso para eliminar este material");
+        }
+
         materialRepository.delete(material);
 
         eliminarArchivoLocal(material.getUrlArchivo());
@@ -191,5 +201,7 @@ public class MaterialService {
             throw new RuntimeException("Error al eliminar el archivo local: " + e.getMessage(), e);
         }
     }
+
+     */
 
 }

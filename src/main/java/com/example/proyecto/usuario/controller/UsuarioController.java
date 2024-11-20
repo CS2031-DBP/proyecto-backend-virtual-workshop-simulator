@@ -1,11 +1,14 @@
 package com.example.proyecto.usuario.controller;
 
 import com.example.proyecto.usuario.domail.UsuarioService;
+import com.example.proyecto.usuario.dto.Inscribirse;
 import com.example.proyecto.usuario.dto.UsuarioRequestDto;
 import com.example.proyecto.usuario.dto.UsuarioResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -25,15 +28,27 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioResponseDto);
     }
 
-    @PostMapping("/{usuarioId}/carreras/{carreraId}/inscribir")
-    public ResponseEntity<UsuarioResponseDto> inscripcion(@PathVariable Long usuarioId,
-                                                          @PathVariable Long carreraId){
-        return ResponseEntity.ok(usuarioService.inscribirse(usuarioId, carreraId));
+    @PostMapping("/{id}/perfil")
+    public ResponseEntity<String> perfil(@PathVariable Long id,
+                                         @RequestParam("file")MultipartFile file){
+        try{
+
+            return ResponseEntity.status(HttpStatus.OK).body(usuarioService.perfil(id, file));
+
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo subir su perfil");
+        }
+
+    }
+
+    @PostMapping("/carreras/inscribir")
+    public ResponseEntity<UsuarioResponseDto> inscripcion(@RequestBody Inscribirse in){
+        return ResponseEntity.ok(usuarioService.inscribirse(in));
     }
 
     @GetMapping("/listUsuarios")
-    public ResponseEntity<List<UsuarioResponseDto>> retornarByCarrera(){
-        return ResponseEntity.ok(usuarioService.retornarByCarrera());
+    public ResponseEntity<List<UsuarioResponseDto>> retornarLista(){
+        return ResponseEntity.ok(usuarioService.retornarLista());
     }
 
     @GetMapping("/{usuarioId}")
@@ -42,9 +57,21 @@ public class UsuarioController {
     }
 
     @PutMapping("/{usuarioId}")
-    public ResponseEntity<UsuarioResponseDto> reemplazarUsuario(@PathVariable Long usuarioId,
-                                                  @RequestBody UsuarioRequestDto usuarioRequestDto){
-        return ResponseEntity.ok(usuarioService.reemplazarUsuario(usuarioId, usuarioRequestDto));
+    public ResponseEntity<UsuarioResponseDto> editar(@PathVariable Long usuarioId,
+                                                     @RequestBody UsuarioRequestDto usuarioRequestDto,
+                                                     @RequestParam MultipartFile file){
+
+        try {
+
+            if (file.getContentType() != "image/jpeg" || file.getContentType() != "image/png") {
+                throw new IllegalArgumentException("Tipo de archivo no permitido");
+            }
+
+            return ResponseEntity.ok(usuarioService.editar(usuarioId, usuarioRequestDto, file));
+
+        }catch (Exception e){
+            throw new RuntimeException("Error al leer el archivo: " + e.getMessage(), e);
+        }
     }
 
     @DeleteMapping("/{usuarioId}")

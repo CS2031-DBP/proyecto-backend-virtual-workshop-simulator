@@ -1,7 +1,6 @@
 package com.example.proyecto.auth.domain;
 
 import com.example.proyecto.exception.UserAlreadyExistException;
-import com.example.proyecto.usuario.domail.Role;
 import com.example.proyecto.usuario.domail.Usuario;
 import com.example.proyecto.usuario.infrastructure.UsuarioRepository;
 import com.example.proyecto.auth.dto.JwtTokenToUse;
@@ -43,38 +42,20 @@ public class AuthService {
         return temp;
     }
 
-    public JwtTokenToUse realizar_registro(DatosNecesariosRegistro req){
+    public JwtTokenToUse realizar_registro(DatosNecesariosRegistro req) {
         Optional<Usuario> user = userRepository.findByEmail(req.getEmail());
         if (user.isPresent()) throw new UserAlreadyExistException("Email is Already Used");
 
-        if (req.getIsAdminr()) {
-            Usuario usuario = new Usuario();
-            usuario.setNombre(req.getNombre());
-            usuario.setEmail(req.getEmail());
-            usuario.setFechaRegistro(req.getFechaRegistro());
-            usuario.setRole(Role.USER);
-            usuario.setPassword(passwordEncoder.encode(req.getPassword()));
+        Usuario usuario = new Usuario();
+        usuario.setNombre(req.getNombre());
+        usuario.setEmail(req.getEmail());
+        usuario.setFechaRegistro(req.getFechaRegistro());
+        usuario.setPassword(passwordEncoder.encode(req.getPassword()));
 
-
-            userRepository.save(usuario);
-            JwtTokenToUse temp = new JwtTokenToUse();
-            temp.setToken(jwtService.generarToken(usuario));
-            return temp;
-        }
-        else {
-            Usuario usuario = new Usuario();
-            usuario.setNombre(req.getNombre());
-            usuario.setEmail(req.getEmail());
-            usuario.setFechaRegistro(req.getFechaRegistro());
-            usuario.setRole(Role.ADMIN);
-            usuario.setPassword(passwordEncoder.encode(req.getPassword()));
-
-
-            userRepository.save(usuario);
-            JwtTokenToUse temp = new JwtTokenToUse();
-            temp.setToken(jwtService.generarToken(usuario));
-            return temp;
-        }
-
+        userRepository.save(usuario);
+        JwtTokenToUse temp = new JwtTokenToUse();
+        temp.setToken(jwtService.generarToken(usuario));
+        return temp;
     }
+
 }
