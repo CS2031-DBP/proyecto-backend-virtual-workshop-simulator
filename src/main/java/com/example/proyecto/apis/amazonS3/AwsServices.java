@@ -1,9 +1,13 @@
 package com.example.proyecto.apis.amazonS3;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
@@ -21,8 +25,9 @@ public class AwsServices {
     @Value("${aws.s3.region}")
     private String region;
 
-    public AwsServices(S3Client s3client){
-        this.s3Client = s3client;
+
+    public AwsServices(S3Client s3Client) {
+        this.s3Client = s3Client;
     }
 
     public String uploadFile(String keyname, MultipartFile file) throws IOException {

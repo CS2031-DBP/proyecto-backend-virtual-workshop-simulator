@@ -20,6 +20,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        String requestPath = request.getRequestURI();
+        System.out.println("Request Path: " + requestPath); // Para depuración
+
+        // Excluir las rutas que empiezan con "/auth/"
+        if (requestPath.startsWith("/auth/")) {
+            System.out.println("Excluyendo ruta: " + requestPath); // Para verificar exclusión
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String authHeader = request.getHeader("Authorization");
         String jwt;
         String userEmail;

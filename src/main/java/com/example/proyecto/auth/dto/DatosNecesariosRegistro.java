@@ -8,5 +8,4 @@ public class DatosNecesariosRegistro {
     private String nombre;
     private String email;
     private String password;
-    private LocalDateTime fechaRegistro;
 }

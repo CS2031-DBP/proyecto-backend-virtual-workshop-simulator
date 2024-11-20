@@ -67,6 +67,16 @@ public class UsuarioService {
         return url;
     }
 
+    public void eliminarPerfil(Long id){
+
+        String keyName = "users/" + id + "/perfil";
+
+        if (awsServices.fileExists(keyName)) {
+            awsServices.DeleteFile(keyName);
+        }
+
+    }
+
     public UsuarioResponseDto inscribirse(Inscribirse in){
         System.out.println(in.getUsuarioId());
         System.out.println(in.getCarreaId());

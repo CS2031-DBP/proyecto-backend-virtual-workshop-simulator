@@ -36,7 +36,8 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.OK).body(usuarioService.perfil(id, file));
 
         } catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("No se pudo subir su perfil");
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("No se pudo subir su perfil");
         }
 
     }
@@ -77,6 +78,12 @@ public class UsuarioController {
     @DeleteMapping("/{usuarioId}")
     public ResponseEntity<Void> delete(@PathVariable Long usuarioId){
         usuarioService.eliminar(usuarioId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}/perfil")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id){
+        usuarioService.eliminarPerfil(id);
         return ResponseEntity.noContent().build();
     }
 

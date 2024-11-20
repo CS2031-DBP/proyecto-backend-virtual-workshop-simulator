@@ -15,12 +15,12 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-@RequiredArgsConstructor
 public class JwtService {
 
     @Value("${jwt.secret}")
     private String secret;
-    private UsuarioService usuarioService;
+
+    private final UsuarioService usuarioService;
     public JwtService(UsuarioService usuarioService ){
         this.usuarioService = usuarioService;
     }
@@ -43,7 +43,7 @@ public class JwtService {
 
     public void validateToken(String token, String userEmail) throws AuthenticationException {
         JWT.require(Algorithm.HMAC256(secret)).build().verify(token);
-        UserDetails user = usuarioService.userDetailsService().loadUserByUsername(userEmail);
+        UserDetails user = usuarioService.findByEmail(userEmail);
 
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, token, user.getAuthorities());
