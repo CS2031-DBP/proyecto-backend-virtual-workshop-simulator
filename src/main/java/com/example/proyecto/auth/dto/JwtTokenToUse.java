@@ -5,4 +5,5 @@ import lombok.Data;
 @Data
 public class JwtTokenToUse {
     private String token;
+    private String usuarioId;
 }

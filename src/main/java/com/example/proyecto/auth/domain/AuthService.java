@@ -39,6 +39,7 @@ public class AuthService {
 
         JwtTokenToUse temp = new JwtTokenToUse();
         temp.setToken(jwtService.generarToken(user.get()));
+        temp.setUsuarioId(String.valueOf(user.get().getId()));
         return temp;
     }
 

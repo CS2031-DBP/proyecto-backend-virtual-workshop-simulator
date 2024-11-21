@@ -53,7 +53,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{usuarioId}")
-    public ResponseEntity<UsuarioResponseDto> retornarById(@RequestParam Long usuarioId){
+    public ResponseEntity<UsuarioResponseDto> retornarById(@PathVariable Long usuarioId){
         return ResponseEntity.ok(usuarioService.retornarById(usuarioId));
     }
 
