@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -40,6 +41,7 @@ public class AuthService {
         JwtTokenToUse temp = new JwtTokenToUse();
         temp.setToken(jwtService.generarToken(user.get()));
         temp.setUsuarioId(String.valueOf(user.get().getId()));
+
         return temp;
     }
 
@@ -50,6 +52,8 @@ public class AuthService {
         Usuario usuario = new Usuario();
         usuario.setNombre(req.getNombre());
         usuario.setEmail(req.getEmail());
+        usuario.setFechaRegistro(LocalDateTime.now());
+        usuario.setPerfilUrl(req.getPerfilUrl());
         usuario.setPassword(passwordEncoder.encode(req.getPassword()));
 
         userRepository.save(usuario);

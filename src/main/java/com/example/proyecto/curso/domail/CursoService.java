@@ -3,6 +3,7 @@ package com.example.proyecto.curso.domail;
 import com.example.proyecto.auth.config.AuthorizationConfig;
 import com.example.proyecto.carrera.domail.Carrera;
 import com.example.proyecto.carrera.infrastructure.CarreraRepository;
+import com.example.proyecto.curso.dto.CursoRequestAsignarDto;
 import com.example.proyecto.curso.dto.CursoRequestDto;
 import com.example.proyecto.curso.dto.CursoResponseDto;
 import com.example.proyecto.curso.infrastructure.CursoRepository;
@@ -60,10 +61,10 @@ public class CursoService {
         if (!usuario.getCarreras().contains(carrera)) {
             throw new UnauthorizeOperationException("No puedes actualizar. No está inscrito en la carrera.");
         }
-
-        if (cursoRepository.findByNombre(requestDto.getNombre()).isPresent()) {
-            throw new ResourceConflictException("Curso ya existente");
-        }
+          //esta comprobacion inpide asignar el mismo  curso para varias carreras
+//        if (cursoRepository.findByNombre(requestDto.getNombre()).isPresent()) {
+//            throw new ResourceConflictException("Curso ya existente");
+//        }
 
 
         Curso curso = new Curso();
@@ -73,6 +74,34 @@ public class CursoService {
 
         cursoRepository.save(curso);
         return modelMapper.map(curso, CursoResponseDto.class);
+    }
+
+    public Curso AsignarCurso(CursoRequestAsignarDto requestDto) {
+
+        String userEmail = authorizationConfig.getCurrentUserEmail();
+
+        if(userEmail == null){
+            throw new UnauthorizeOperationException("No se encuentra AUTORIZADO!!");
+        }
+
+        Carrera carrera = carreraRepository.findById(requestDto.getCarreraId())
+                .orElseThrow(() -> new ResourceNotFoundException("Carrera no encontrada"));
+
+        //esta comprobacion inpide asignar el mismo  curso para varias carreras
+//        if (cursoRepository.findByNombre(requestDto.getNombre()).isPresent()) {
+//            throw new ResourceConflictException("Curso ya existente");
+//        }
+
+
+//
+//        modelMapper.map(requestDto, curso);
+        Curso curso = cursoRepository.findById(requestDto.getCursoId()).orElseThrow(() -> new ResourceNotFoundException("curso no encontrada"));
+         List<Curso> temp =carrera.getCursos();
+         temp.add(curso);
+        carrera.setCursos(temp);
+        carreraRepository.save(carrera);
+        return curso;
+//        return modelMapper.map(curso, CursoResponseDto.class);
     }
 
     public Page<CursoResponseDto> retornarByCarrera(Pageable pageable){

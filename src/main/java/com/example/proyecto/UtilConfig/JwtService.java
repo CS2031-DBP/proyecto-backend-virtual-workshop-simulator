@@ -26,8 +26,12 @@ public class JwtService {
     }
 
     public String generarToken(UserDetails data){
-        Date now = new Date();
-        Date expiration = new Date(now.getTime() + 1000 * 60 * 60 * 10);
+        var now = new Date();
+        var now1 = new Date().getTime();
+        //expr = 9 horas
+        //var hour = 1000 * 60 * 60;
+        //var day = 1000 * 60 * 60 * 24;
+        Date expiration = new Date(now1 + (1000 * 60 * 60 * 9));
 
         Algorithm algorithm = Algorithm.HMAC256(secret);
 
