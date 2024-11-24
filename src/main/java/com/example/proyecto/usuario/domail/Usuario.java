@@ -12,18 +12,25 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Data
 @Entity
-public class Usuario {
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
+    @JoinColumn(nullable = false, unique = true)
     private String nombre;
 
     @Email
@@ -32,6 +39,8 @@ public class Usuario {
 
     @Size(min = 8, message = "la contraseña debe tener un min de 8 caracteres")
     private String password;
+
+    private String perfilUrl;
 
     private LocalDateTime fechaRegistro;
 
@@ -47,10 +56,10 @@ public class Usuario {
     )
     private List<Carrera> carreras;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "autor")
     private List<Post> posts;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "propietario")
     private List<Material> materiales;
 
     @OneToMany(mappedBy = "usuario")
@@ -64,6 +73,39 @@ public class Usuario {
     public void onPrePersist() {
         fechaRegistro = LocalDateTime.now();
     }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+
 
 
 

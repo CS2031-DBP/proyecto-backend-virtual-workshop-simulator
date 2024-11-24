@@ -9,7 +9,13 @@ import java.time.LocalDateTime;
 @Data
 public class ActividadResponseDto {
 
+    private Long id;
+
     private String nombre;
+
+    private String nameUsuario;
+
+    private String perfilUsuario;
 
     private Categoria tipo;
 

@@ -8,8 +8,6 @@ import java.util.List;
 @Data
 public class PostRequestDto {
 
-    private  Long id;
-
     private Long usuarioId;
 
     private Long carreraId;

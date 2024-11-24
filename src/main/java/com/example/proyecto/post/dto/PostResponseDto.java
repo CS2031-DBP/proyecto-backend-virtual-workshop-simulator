@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 public class PostResponseDto {
 
-    private Long postId;
+    private Long id;
 
     private String titulo;
 
@@ -20,7 +20,5 @@ public class PostResponseDto {
     private String contenido;
 
     private LocalDateTime fechaCreacion;
-
-    private List<Comentario> comentariosIds;
 
 }

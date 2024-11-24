@@ -7,6 +7,8 @@ import com.example.proyecto.exception.ResourceConflictException;
 import com.example.proyecto.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.Banner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ public class CarreraService {
             throw new ResourceConflictException("La carrera ya existe");
         }
         Carrera carrera = new Carrera();
-        modelMapper.map(requestDto, carrera);
+        carrera.setNombre(requestDto.getNombre());
         carreraRepository.save(carrera);
         return modelMapper.map(carrera, CarreraResponseDto.class);
     }
@@ -46,15 +48,14 @@ public class CarreraService {
         for (Carrera carrera : carreras) {
             carrerasDto.add(modelMapper.map(carrera, CarreraResponseDto.class));
         }
-
         return carrerasDto;
     }
 
     public CarreraResponseDto updateCarrera(Long id, CarreraRequestDto requestDto) {
         Carrera carrera = carreraRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Carrera no encontrada"));
-        modelMapper.map(requestDto, carrera);
-        carreraRepository.save(carrera);
+
+        carrera.setNombre(requestDto.getNombre());
         return modelMapper.map(carrera, CarreraResponseDto.class);
     }
 

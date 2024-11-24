@@ -7,8 +7,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 public class MaterialRequestDto {
 
+    private Long usuarioId;
+    private Long cursoId;
     private String nombre;
     private Tipo tipo;
-    private MultipartFile archivo;
 
 }

@@ -12,5 +12,4 @@ public class CarreraResponseDto {
     private String nombre;
     private List<Curso> cursos;
 
-
 }

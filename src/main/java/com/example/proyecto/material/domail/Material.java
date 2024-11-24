@@ -39,12 +39,7 @@ public class Material {
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     @JsonBackReference
-    private Usuario usuario;
-
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    @JsonBackReference
-    private Post post;
+    private Usuario propietario;
 
     @ManyToOne
     @JoinColumn(name = "curso_id")

@@ -16,6 +16,8 @@ public class UsuarioResponseDto {
 
     private String email;
 
+    private String perfilUrl;
+
     private LocalDateTime fechaRegistro;
 
     private List<Carrera> carreras;

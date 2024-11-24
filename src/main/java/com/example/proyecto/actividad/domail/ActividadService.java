@@ -95,10 +95,18 @@ public class ActividadService {
         return modelMapper.map(actividad, ActividadResponseDto.class);
     }
 
-    public ActividadResponseDto getActividadById(Long id) {
+    public ActividadResponseDto getActividadById(Long usuarioId,Long id) {
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+
         Actividad actividad = actividadRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Actividad no encontrada"));
-        return modelMapper.map(actividad, ActividadResponseDto.class);
+
+        ActividadResponseDto act = modelMapper.map(actividad, ActividadResponseDto.class);
+        act.setNameUsuario(usuario.getNombre());
+        act.setPerfilUsuario(usuario.getPerfilUrl());
+
+        return act ;
     }
 
     public List<ActividadResponseDto> getAll(){

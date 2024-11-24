@@ -17,11 +17,8 @@ public class MaterialResponseDto {
 
     private double rating;
 
-    private String cursoNombre;
-
     private String usuarioNombre;
 
-    private int numeroCalificaciones;
 
 
 }

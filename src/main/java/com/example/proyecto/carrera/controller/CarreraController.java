@@ -3,11 +3,15 @@ package com.example.proyecto.carrera.controller;
 import com.example.proyecto.carrera.domail.CarreraService;
 import com.example.proyecto.carrera.dto.CarreraRequestDto;
 import com.example.proyecto.carrera.dto.CarreraResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/carreras")
@@ -32,11 +36,14 @@ public class CarreraController {
 
     @GetMapping
     public ResponseEntity<List<CarreraResponseDto>> getAllCarreras() {
-        return ResponseEntity.ok(carreraService.getAll());
+
+        List<CarreraResponseDto> carreras = carreraService.getAll();
+        return ResponseEntity.ok(carreras);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CarreraResponseDto> updateCarrera(@PathVariable Long id, @RequestBody CarreraRequestDto carreraRequestDto) {
+    public ResponseEntity<CarreraResponseDto> updateCarrera(@PathVariable Long id,
+                                                            @RequestBody CarreraRequestDto carreraRequestDto) {
         CarreraResponseDto response = carreraService.updateCarrera(id, carreraRequestDto);
         return ResponseEntity.ok(response);
     }

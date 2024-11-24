@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/actividades")
 public class ActividadController {
@@ -30,9 +32,16 @@ public class ActividadController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ActividadResponseDto> getActividadById(@PathVariable Long id) {
-        ActividadResponseDto response = actividadService.getActividadById(id);
+    @GetMapping
+    public ResponseEntity<List<ActividadResponseDto>> getAll() {
+        List<ActividadResponseDto> response = actividadService.getAll();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{usuarioId}/{id}")
+    public ResponseEntity<ActividadResponseDto> getActividadById(@PathVariable Long usuarioId,
+                                                                 @PathVariable Long id) {
+        ActividadResponseDto response = actividadService.getActividadById(usuarioId,id);
         return ResponseEntity.ok(response);
     }
 

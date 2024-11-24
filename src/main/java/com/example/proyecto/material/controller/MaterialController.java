@@ -4,8 +4,13 @@ import com.example.proyecto.material.domail.MaterialService;
 import com.example.proyecto.material.dto.MaterialRequestDto;
 import com.example.proyecto.material.dto.MaterialResponseDto;
 
+import com.example.proyecto.post.dto.PostResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/materiales")
@@ -17,46 +22,25 @@ public class MaterialController {
 
     }
 
-    /*
-
-    @PostMapping
-    public ResponseEntity<MaterialResponseDto> createMaterial(@RequestBody MaterialRequestDto materialRequestDto) {
-        MaterialResponseDto response = materialService.createMaterial(materialRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
-    @PostMapping("/pictures")
-    public ResponseEntity<String> uploadPicture(MultipartFile file) throws Exception {
-
-        return new ResponseEntity<>(materialService.uploadPicture(file), HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<MaterialResponseDto> getMaterialById(@PathVariable Long id) {
-        MaterialResponseDto response = materialService.getMaterialById(id);
-        return ResponseEntity.ok(response);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<MaterialResponseDto> updateMaterial(@PathVariable Long id, @RequestBody MaterialRequestDto materialRequestDto) {
-        MaterialResponseDto response = materialService.updateMaterial(id, materialRequestDto);
-        return ResponseEntity.ok(response);
-    }
-     */
-
-    @PostMapping("/{cursoId}/{usuarioId}/subir")
-    public ResponseEntity<MaterialResponseDto> subirMaterial(
-            @PathVariable Long cursoId,
-            @PathVariable Long usuarioId,
-            @ModelAttribute MaterialRequestDto requestDto) {
-        MaterialResponseDto responseDto = materialService.subirMaterial(cursoId, usuarioId, requestDto);
+    @PostMapping("/subir")
+    public ResponseEntity<MaterialResponseDto> subirMaterial(@ModelAttribute MaterialRequestDto materialRequestDto,
+                                                            @RequestParam("file") MultipartFile file) {
+        MaterialResponseDto responseDto = materialService.subirMaterial(materialRequestDto, file);
         return ResponseEntity.ok(responseDto);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMaterial(@PathVariable Long id) {
-        materialService.deleteMaterial(id);
+    @DeleteMapping("/{materialId}")
+    public ResponseEntity<Void> deleteMaterial(@PathVariable Long materialId) {
+        materialService.deleteMaterial(materialId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<MaterialResponseDto>> getPosts(@RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<MaterialResponseDto> materiales = materialService.getAll(pageable);
+        return ResponseEntity.ok(materiales);
     }
 
 }
