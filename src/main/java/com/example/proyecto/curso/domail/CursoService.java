@@ -1,5 +1,8 @@
 package com.example.proyecto.curso.domail;
 
+import com.example.proyecto.actividad.domail.Actividad;
+import com.example.proyecto.actividad.dto.ActividadResponseDto;
+import com.example.proyecto.actividad.infrastructure.ActividadRepository;
 import com.example.proyecto.auth.config.AuthorizationConfig;
 import com.example.proyecto.carrera.domail.Carrera;
 import com.example.proyecto.carrera.infrastructure.CarreraRepository;
@@ -12,6 +15,7 @@ import com.example.proyecto.exception.ResourceNotFoundException;
 import com.example.proyecto.exception.UnauthorizeOperationException;
 import com.example.proyecto.post.domail.Post;
 import com.example.proyecto.usuario.domail.Usuario;
+import com.example.proyecto.usuario.dto.UsuarioCursosResDTO;
 import com.example.proyecto.usuario.dto.UsuarioResponseDto;
 import com.example.proyecto.usuario.infrastructure.UsuarioRepository;
 import org.modelmapper.ModelMapper;
@@ -31,16 +35,19 @@ public class CursoService {
     private final ModelMapper modelMapper;
     private final AuthorizationConfig authorizationConfig;
     private final UsuarioRepository usuarioRepository;
+    private final ActividadRepository actividadRepository;
+
     public CursoService(CursoRepository cursoRepository,
                         CarreraRepository carreraRepository,
                         ModelMapper modelMapper,
                         AuthorizationConfig authorizationConfig,
-                        UsuarioRepository usuarioRepository) {
+                        UsuarioRepository usuarioRepository, ActividadRepository actividadRepository) {
         this.cursoRepository = cursoRepository;
         this.carreraRepository = carreraRepository;
         this.modelMapper = modelMapper;
         this.authorizationConfig = authorizationConfig;
         this.usuarioRepository = usuarioRepository;
+        this.actividadRepository = actividadRepository;
     }
 
 
@@ -102,6 +109,22 @@ public class CursoService {
         carreraRepository.save(carrera);
         return curso;
 //        return modelMapper.map(curso, CursoResponseDto.class);
+    }
+
+    public List<ActividadResponseDto> getActividadCursoByNameOrId(String  nombre_id){
+        Curso temp;
+        if(nombre_id.length() < 3 ){
+            temp = cursoRepository.findById(Long.valueOf(nombre_id)).orElseThrow(() -> new ResourceNotFoundException("curso no encontrada"));
+        }else{
+             temp = cursoRepository.findByNombre(nombre_id).orElseThrow(() -> new ResourceNotFoundException("curso no encontrada"));
+        }
+        List<Actividad> new_temp =  temp.getActividades();
+        List<ActividadResponseDto> ActividadResponseDtos = new ArrayList<>();
+        for ( Actividad act: new_temp) {
+            ActividadResponseDtos.add(modelMapper.map(act, ActividadResponseDto.class));
+        }
+        return ActividadResponseDtos;
+
     }
 
     public Page<CursoResponseDto> retornarByCarrera(Pageable pageable){

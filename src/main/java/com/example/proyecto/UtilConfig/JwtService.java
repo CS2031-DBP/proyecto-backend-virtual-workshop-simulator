@@ -31,7 +31,7 @@ public class JwtService {
         //expr = 9 horas
         //var hour = 1000 * 60 * 60;
         //var day = 1000 * 60 * 60 * 24;
-        Date expiration = new Date(now1 + (1000 * 60 * 60 * 9));
+        Date expiration = new Date(now1 + (1000 * 60 * 60 * 10));
 
         Algorithm algorithm = Algorithm.HMAC256(secret);
 

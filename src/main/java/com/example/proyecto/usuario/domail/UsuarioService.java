@@ -4,9 +4,12 @@ package com.example.proyecto.usuario.domail;
 import com.example.proyecto.apis.amazonS3.AwsServices;
 import com.example.proyecto.carrera.domail.Carrera;
 import com.example.proyecto.carrera.infrastructure.CarreraRepository;
+import com.example.proyecto.curso.domail.Curso;
+import com.example.proyecto.curso.infrastructure.CursoRepository;
 import com.example.proyecto.exception.ResourceConflictException;
 import com.example.proyecto.exception.ResourceNotFoundException;
 import com.example.proyecto.usuario.dto.Inscribirse;
+import com.example.proyecto.usuario.dto.UsuarioCursosResDTO;
 import com.example.proyecto.usuario.dto.UsuarioRequestDto;
 import com.example.proyecto.usuario.dto.UsuarioResponseDto;
 import com.example.proyecto.usuario.infrastructure.UsuarioRepository;
@@ -30,15 +33,17 @@ public class UsuarioService {
     private final CarreraRepository carreraRepository;
     private final ModelMapper modelMapper;
     private  final AwsServices awsServices;
+    private final CursoRepository cursoRepository;
+
     public UsuarioService(UsuarioRepository usuarioRepository,
                           CarreraRepository carreraRepository,
                           ModelMapper modelMapper,
-                          AwsServices awsServices) {
+                          AwsServices awsServices, CursoRepository cursoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.carreraRepository = carreraRepository;
         this.modelMapper = modelMapper;
         this.awsServices = awsServices;
-
+        this.cursoRepository = cursoRepository;
     }
 
     public UsuarioResponseDto crear(UsuarioRequestDto usuarioRequestDto){
@@ -111,6 +116,19 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(id).
                 orElseThrow(()-> new ResourceNotFoundException("Usuario no encontrado"));
         return modelMapper.map(usuario, UsuarioResponseDto.class);
+
+    }
+
+    public List<UsuarioCursosResDTO> retornarallCursos(Long id){
+        Usuario usuario = usuarioRepository.findById(id).
+                orElseThrow(()-> new ResourceNotFoundException("Usuario no encontrado"));
+        List<Curso> temp = cursoRepository.findAll();
+
+        List<UsuarioCursosResDTO> UsuarioCursosResDTOs = new ArrayList<>();
+        for (Curso curso: temp) {
+            UsuarioCursosResDTOs.add(modelMapper.map(curso, UsuarioCursosResDTO.class));
+        }
+        return UsuarioCursosResDTOs;
 
     }
 

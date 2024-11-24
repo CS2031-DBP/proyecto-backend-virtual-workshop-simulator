@@ -2,6 +2,7 @@ package com.example.proyecto.usuario.controller;
 
 import com.example.proyecto.usuario.domail.UsuarioService;
 import com.example.proyecto.usuario.dto.Inscribirse;
+import com.example.proyecto.usuario.dto.UsuarioCursosResDTO;
 import com.example.proyecto.usuario.dto.UsuarioRequestDto;
 import com.example.proyecto.usuario.dto.UsuarioResponseDto;
 import org.springframework.http.HttpStatus;
@@ -55,6 +56,11 @@ public class UsuarioController {
     @GetMapping("/{usuarioId}")
     public ResponseEntity<UsuarioResponseDto> retornarById(@PathVariable Long usuarioId){
         return ResponseEntity.ok(usuarioService.retornarById(usuarioId));
+    }
+
+    @GetMapping("/listaAllCursos/{usuarioId}")
+    public ResponseEntity<List<UsuarioCursosResDTO>> retornarallCursos(@PathVariable Long usuarioId){
+        return ResponseEntity.ok(usuarioService.retornarallCursos(usuarioId));
     }
 
     @PutMapping("/{usuarioId}")

@@ -1,5 +1,6 @@
 package com.example.proyecto.curso.controller;
 
+import com.example.proyecto.actividad.dto.ActividadResponseDto;
 import com.example.proyecto.curso.domail.Curso;
 import com.example.proyecto.curso.domail.CursoService;
 import com.example.proyecto.curso.dto.CursoRequestAsignarDto;
@@ -33,11 +34,20 @@ public class CursoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+
+    //nuevos endpoints
     @PostMapping("asignar/")
     public ResponseEntity<Curso> createCurso(@RequestBody CursoRequestAsignarDto cursoRequestAsignarDto) {
         Curso response = cursoService.AsignarCurso(cursoRequestAsignarDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+    @GetMapping("/actividades/{nombre_id}")
+    public ResponseEntity<List<ActividadResponseDto> > getActividades(@PathVariable String  nombre_id) {
+        List<ActividadResponseDto> response = cursoService.getActividadCursoByNameOrId(nombre_id);
+        return ResponseEntity.ok(response);
+    }
+    //
+
 
     @GetMapping()
     public ResponseEntity<Page<CursoResponseDto>> retornarByCarrera(@RequestParam(defaultValue = "0") int page,
