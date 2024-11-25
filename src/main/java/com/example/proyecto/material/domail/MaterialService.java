@@ -81,7 +81,7 @@ public class MaterialService {
 
             MaterialResponseDto materialResponseDto = modelMapper.map(material, MaterialResponseDto.class);
             materialResponseDto.setUsuarioNombre(usuario.getNombre());
-
+            System.out.println(materialResponseDto);
             return materialResponseDto;
         } catch (IOException e) {
             throw new RuntimeException("Error al almacenar el archivo", e);

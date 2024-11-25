@@ -2,6 +2,7 @@ package com.example.proyecto.calificacion.domail;
 
 import com.example.proyecto.calificacion.dto.CalificacionRequestDto;
 import com.example.proyecto.calificacion.infrastructure.CalificacionRepository;
+import com.example.proyecto.exception.ResourceConflictException;
 import com.example.proyecto.exception.ResourceForbiddenException;
 import com.example.proyecto.exception.ResourceNotFoundException;
 import com.example.proyecto.material.domail.Material;
@@ -33,35 +34,37 @@ public class CalificacionService {
 
     public MaterialResponseDto calificarMaterial(CalificacionRequestDto request) {
 
-        Usuario usuario = usuarioRepository.findById(request.getUsuarioId()).
-                orElseThrow( () -> new ResourceNotFoundException("Usuario no encontrado"));
+        Usuario usuario = usuarioRepository.findById(request.getUsuarioId())
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
 
-        Material material = materialRepository.findById(request.getMaterialId()).
-                orElseThrow(()-> new ResourceNotFoundException("Material no encontrado"));
+        Material material = materialRepository.findById(request.getMaterialId())
+                .orElseThrow(() -> new ResourceNotFoundException("Material no encontrado"));
 
-        if (!usuario.getCarreras().contains(material.getCurso().getCarrera())){
-            throw new ResourceForbiddenException("El usuario no esta inscrito en la carrera del curso de este material");
+        if (!usuario.getCarreras().contains(material.getCurso().getCarrera())) {
+            throw new ResourceConflictException("El usuario no está inscrito en la carrera del curso de este material");
         }
 
+        Calificacion calificacionExistente = calificacionRepository
+                .findByUsuarioIdAndMaterialId(request.getUsuarioId(), request.getMaterialId())
+                .orElse(null);
 
-        Optional<Calificacion> calificacionExistente = calificacionRepository.
-                findByUsuarioIdAndMaterialId(request.getUsuarioId(), request.getMaterialId());
+        if (calificacionExistente != null) {
 
-
-        if (calificacionExistente.isPresent()) {
-            throw new IllegalArgumentException("El usuario ya ha calificado este material");
+            calificacionExistente.setValor(request.getValor());
+            calificacionRepository.save(calificacionExistente);
+        } else {
+            Calificacion nuevaCalificacion = new Calificacion();
+            nuevaCalificacion.setValor(request.getValor());
+            nuevaCalificacion.setUsuario(usuario);
+            nuevaCalificacion.setMaterial(material);
+            calificacionRepository.save(nuevaCalificacion);
         }
 
-        Calificacion nuevaCalificacion = new Calificacion();
-        nuevaCalificacion.setValor(request.getValor());
-        nuevaCalificacion.setUsuario(usuario);
-        nuevaCalificacion.setMaterial(material);
-
-        calificacionRepository.save(nuevaCalificacion);
-
-        material.agregarCalificacion(request.getValor());
+        double nuevoPromedio = calificacionRepository.promedioCalificacionPorMaterial(material.getId());
+        material.setRating(nuevoPromedio);
         materialRepository.save(material);
 
         return modelMapper.map(material, MaterialResponseDto.class);
     }
+
 }

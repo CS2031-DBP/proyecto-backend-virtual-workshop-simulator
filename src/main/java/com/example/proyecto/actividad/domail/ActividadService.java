@@ -109,11 +109,12 @@ public class ActividadService {
         return act ;
     }
 
-    public List<ActividadResponseDto> getAll(){
-        List<Actividad> actividades = actividadRepository.findAll();
+    public List<ActividadResponseDto> getAll(Long cursoId) {
+        Curso curso = cursoRepository.findById(cursoId).orElseThrow(()->new ResourceNotFoundException("El carrera no fue encontrada"));
+        List<Actividad> actividades = actividadRepository.findByCurso(curso);
         List<ActividadResponseDto> act = new ArrayList<>();
-        for (Actividad actividad:actividades){
-            act.add(modelMapper.map(actividad,ActividadResponseDto.class));
+        for (Actividad actividad : actividades) {
+            act.add(modelMapper.map(actividad, ActividadResponseDto.class));
         }
         return act;
     }

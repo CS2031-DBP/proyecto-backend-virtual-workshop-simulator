@@ -20,10 +20,11 @@ public class Calificacion {
     @Max(5)
     private int valor;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "usuario_id")
     @JsonBackReference
     private Usuario usuario;
+
 
     @ManyToOne
     @JoinColumn(name = "material_id")

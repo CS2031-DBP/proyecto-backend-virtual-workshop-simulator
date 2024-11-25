@@ -1,6 +1,7 @@
 package com.example.proyecto.usuario.domail;
 
 import com.example.proyecto.actividad.domail.Actividad;
+import com.example.proyecto.calificacion.domail.Calificacion;
 import com.example.proyecto.carrera.domail.Carrera;
 import com.example.proyecto.comentario.domail.Comentario;
 import com.example.proyecto.material.domail.Material;
@@ -64,6 +65,10 @@ public class Usuario implements UserDetails {
 
     @OneToMany(mappedBy = "usuario")
     private List<Comentario> comentarios;
+
+    @OneToMany(mappedBy = "usuario")
+    @JsonManagedReference
+    private List<Calificacion> calificaciones;
 
     @OneToMany(mappedBy = "usuario")
     @JsonManagedReference

@@ -32,9 +32,9 @@ public class ActividadController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping
-    public ResponseEntity<List<ActividadResponseDto>> getAll() {
-        List<ActividadResponseDto> response = actividadService.getAll();
+    @GetMapping("curso/{cursoId}")
+    public ResponseEntity<List<ActividadResponseDto>> getAll(@PathVariable Long cursoId) {
+        List<ActividadResponseDto> response = actividadService.getAll(cursoId);
         return ResponseEntity.ok(response);
     }
 
