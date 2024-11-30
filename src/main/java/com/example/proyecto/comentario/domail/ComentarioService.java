@@ -1,14 +1,20 @@
 package com.example.proyecto.comentario.domail;
 
+import com.example.proyecto.auth.config.AuthorizationConfig;
 import com.example.proyecto.comentario.dto.ComentarioRequestDto;
 import com.example.proyecto.comentario.dto.ComentarioResponseDto;
 import com.example.proyecto.comentario.infrastructure.ComentarioRepository;
 import com.example.proyecto.exception.ResourceNotFoundException;
+import com.example.proyecto.exception.UnauthorizeOperationException;
 import com.example.proyecto.post.domail.Post;
+import com.example.proyecto.post.dto.PostResponseDto;
 import com.example.proyecto.post.infrastructure.PostRepository;
 import com.example.proyecto.usuario.domail.Usuario;
 import com.example.proyecto.usuario.infrastructure.UsuarioRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,16 +27,19 @@ public class ComentarioService {
     private final PostRepository postRepository;
     private final UsuarioRepository usuarioRepository;
     private final ModelMapper modelMapper;
+    private final AuthorizationConfig authorizationConfig;
 
     public ComentarioService(ComentarioRepository comentarioRepository,
                              PostRepository postRepository,
                              UsuarioRepository usuarioRepository,
-                             ModelMapper modelMapper){
+                             ModelMapper modelMapper, AuthorizationConfig authorizationConfig){
         this.comentarioRepository = comentarioRepository;
         this.postRepository = postRepository;
         this.usuarioRepository = usuarioRepository;
         this.modelMapper = modelMapper;
 
+
+        this.authorizationConfig = authorizationConfig;
     }
 
     public ComentarioResponseDto createComentario(ComentarioRequestDto requestDto) {
@@ -83,4 +92,7 @@ public class ComentarioService {
                 .orElseThrow(() -> new ResourceNotFoundException("Comentario no encontrado"));
         comentarioRepository.delete(comentario);
     }
+
+
+
 }

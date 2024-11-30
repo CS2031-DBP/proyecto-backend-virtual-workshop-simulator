@@ -34,6 +34,12 @@ public class Usuario implements UserDetails {
     @JoinColumn(nullable = false, unique = true)
     private String nombre;
 
+    @NotNull
+    @JoinColumn(nullable = false, unique = true)
+    private String lastName;
+
+
+
     @Email
     @JoinColumn(nullable = false, unique = true)
     private String email;

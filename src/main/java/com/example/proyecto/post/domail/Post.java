@@ -26,6 +26,8 @@ public class Post {
 
     private LocalDateTime fechaCreacion;
 
+
+
     @ManyToOne
     @JoinColumn(name = "autor_id")
     @JsonBackReference

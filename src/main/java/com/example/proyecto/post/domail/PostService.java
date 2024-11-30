@@ -4,20 +4,24 @@ import com.example.proyecto.actividad.infrastructure.ActividadRepository;
 import com.example.proyecto.auth.config.AuthorizationConfig;
 import com.example.proyecto.carrera.domail.Carrera;
 import com.example.proyecto.carrera.infrastructure.CarreraRepository;
+import com.example.proyecto.comentario.domail.Comentario;
+import com.example.proyecto.comentario.dto.ComentarioResponseDto;
+import com.example.proyecto.comentario.infrastructure.ComentarioRepository;
 import com.example.proyecto.exception.ResourceNotFoundException;
 import com.example.proyecto.exception.UnauthorizeOperationException;
 import com.example.proyecto.material.infrastructure.MaterialRepository;
-import com.example.proyecto.post.dto.PostRequestDto;
-import com.example.proyecto.post.dto.PostResponseDto;
-import com.example.proyecto.post.dto.PostUpdate;
+import com.example.proyecto.post.dto.*;
 import com.example.proyecto.post.infrastructure.PostRepository;
 import com.example.proyecto.usuario.domail.Usuario;
 import com.example.proyecto.usuario.infrastructure.UsuarioRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 @Service
 public class PostService {
@@ -29,6 +33,8 @@ public class PostService {
     public final ActividadRepository actividadRepository;
     private final CarreraRepository carreraRepository;
     private final AuthorizationConfig authorizationConfig;
+    private final ComentarioRepository comentarioRepository;
+
 
     public PostService(PostRepository postRepository,
                        ModelMapper modelMapper,
@@ -36,7 +42,7 @@ public class PostService {
                        MaterialRepository materialRepository,
                        ActividadRepository actividadRepository,
                        CarreraRepository carreraRepository,
-                       AuthorizationConfig authorizationConfig) {
+                       AuthorizationConfig authorizationConfig, ComentarioRepository comentarioRepository) {
         this.postRepository = postRepository;
         this.modelMapper = modelMapper;
         this.usuarioRepository = usuarioRepository;
@@ -44,6 +50,7 @@ public class PostService {
         this.actividadRepository = actividadRepository;
         this.carreraRepository = carreraRepository;
         this.authorizationConfig = authorizationConfig;
+        this.comentarioRepository = comentarioRepository;
     }
 
     public PostResponseDto createPost(PostRequestDto requestDto) {
@@ -128,6 +135,57 @@ public class PostService {
         }
 
         postRepository.delete(post);
+    }
+
+    public Page<PostResponseDto> getChats(int page,int size){
+        Pageable pageable = PageRequest.of(page, size);
+
+        String userEmail = authorizationConfig.getCurrentUserEmail();
+        if(userEmail == null){
+            throw new UnauthorizeOperationException("No tiene Autorizacion");
+        }
+
+        Usuario usuario = usuarioRepository.findByEmail(userEmail).
+                orElseThrow(()-> new ResourceNotFoundException("Usuario no encontrado"));
+
+        return postRepository.findByAutor(usuario, pageable)
+                .map(post -> modelMapper.map(post, PostResponseDto.class));
+    }
+
+    public PostResponseDto createChat(PostRequestChatDto requestDto) {
+
+        String userEmail = authorizationConfig.getCurrentUserEmail();
+        if(userEmail == null){
+            throw new UnauthorizeOperationException("Not Allowed Random Users");
+        }
+
+        Usuario usuario = usuarioRepository.findById(requestDto.getUserID()).
+                orElseThrow(()-> new ResourceNotFoundException("Usuario no encontrado"));
+
+
+        Post post = new Post();
+        post.setAutor(usuario);
+        post.setTitulo(requestDto.getChatName());
+        postRepository.save(post);
+        PostResponseDto postdto = modelMapper.map(post, PostResponseDto.class);
+        postdto.setAutorNombre(usuario.getNombre());
+        postdto.setFechaCreacion(post.getFechaCreacion());
+
+        return postdto;
+
+    }
+
+    public List<Comentario> getMessages(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Post no encontrado"));
+
+        List<Comentario> comentarios = post.getComentarios();
+        return comentarios;
+    }
+    
+    public PostResposeChatDto  makeAiRequest(PostRequestMakeChatDto postRequestMakeChatDto){
+        PostResposeChatDto res = null;
+        return res;
     }
 
 }
